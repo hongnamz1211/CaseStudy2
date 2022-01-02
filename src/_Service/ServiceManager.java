@@ -1,4 +1,4 @@
-package service;
+package _Service;
 
 import _ReadWriteFile.IOFile;
 
@@ -40,13 +40,16 @@ public class ServiceManager {
         scanner.nextLine();
         services.add(new Service(serviceName, priceOfService));
         writerFileData(services);
+        System.out.println("-----");
         System.out.println("Thêm '" + serviceName + "' thành công");
     }
 
 
     public void displayService() {
-        for (int i = 0; i < services.size(); i++) {
-            System.out.println((i + 1) +": " + services.get(i));
+        ArrayList<Service> services = display();
+        for (Service s :
+                services) {
+            s.display();
         }
     }
 
@@ -91,7 +94,7 @@ public class ServiceManager {
             scanner.nextLine();
             services.set(index, service);
             writerFileData(services);
-            System.out.println("Cập nhật '" + serviceName+ "' thành công");
+            System.out.println("Cập nhật '" + serviceName + "' thành công");
         }
     }
 }

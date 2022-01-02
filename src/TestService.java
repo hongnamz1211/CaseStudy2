@@ -1,10 +1,8 @@
-import service.Service;
-import service.ServiceManager;
+import _Service.ServiceManager;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Test {
+public class TestService {
     private static final ServiceManager serviceManager = new ServiceManager();
     private static final Scanner scanner = new Scanner(System.in);
 

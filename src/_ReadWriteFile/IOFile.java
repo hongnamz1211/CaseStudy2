@@ -11,7 +11,7 @@ public class IOFile<E> {
             objectOutputStream.writeObject(arrayData);
             objectOutputStream.close();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("lỗi ghi file");
         }
     }
 

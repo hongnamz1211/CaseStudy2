@@ -1,6 +1,8 @@
-package service;
+package _Service;
 
-public class Service {
+import java.io.Serializable;
+
+public class Service implements Serializable {
     private String serviceName;
     private int priceOfService;
     private int quantityOfService;
@@ -53,8 +55,8 @@ public class Service {
 
 
     public void display() {
-        System.out.printf("%-10S%-10S", "tên dịch vụ:", getServiceName());
-        System.out.printf("%-10S%-10S", "giá tiền", getPriceOfService());
+        System.out.printf("%-10S%-10S", "tên dịch vụ: ", getServiceName());
+        System.out.printf("%-10S%-10S", "giá tiền: ", getPriceOfService());
         System.out.println();
     }
 }
