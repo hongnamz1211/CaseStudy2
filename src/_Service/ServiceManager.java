@@ -2,15 +2,24 @@ package _Service;
 
 import _ReadWriteFile.IOFile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ServiceManager {
-    private final IOFile<Service> ioFile = new IOFile<>();
-    private final String PATHNAME_OF_SERVICE = "src/File/service";
-    private final ArrayList<Service> services = new ArrayList<>();
     private final Scanner scanner = new Scanner(System.in);
+    private final ArrayList<Service> services;
 
+    private final IOFile<Service> ioFile = new IOFile<>();
+    private final File PATHNAME_OF_SERVICE = new File("src/File/service");
+
+    public ServiceManager() {
+        if (PATHNAME_OF_SERVICE.length() == 0) {
+            this.services = new ArrayList<>();
+        } else {
+            this.services = readFileData();
+        }
+    }
 
     public void writerFileData(ArrayList<Service> serviceData) {
         ioFile.writerFileData(serviceData, PATHNAME_OF_SERVICE);

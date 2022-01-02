@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class IOFile<E> {
 
-    public void writerFileData(ArrayList<E> arrayData, String pathname) {
+    public void writerFileData(ArrayList<E> arrayData, File pathname) {
         try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(new File(pathname)));
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream((pathname)));
             objectOutputStream.writeObject(arrayData);
             objectOutputStream.close();
         } catch (IOException e) {
@@ -16,12 +16,12 @@ public class IOFile<E> {
     }
 
 
-    public ArrayList<E> readFileData(String pathname) {
+    public ArrayList<E> readFileData(File pathname) {
         try {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(pathname));
             return (ArrayList<E>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println();
+            System.err.println("lỗi đọc file");
         }
         return null;
     }

@@ -4,6 +4,7 @@ import _ReadWriteFile.IOFile;
 import _Service.Service;
 import _Service.ServiceManager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -11,11 +12,18 @@ import java.util.Scanner;
 public class ComputerManager {
     private int turnOver = 0;
     private final Scanner scanner = new Scanner(System.in);
-    private final ArrayList<Computer> computers = new ArrayList<>();
+    private final ArrayList<Computer> computers;
     private final Computer computer = new Computer();
     private final IOFile<Computer> ioFile = new IOFile<>();
-    private final String PATHNAME_OF_COMPUTER = "src/File/computer";
+    private final File PATHNAME_OF_COMPUTER =  new File("src/File/computer");
 
+    public ComputerManager() {
+        if (PATHNAME_OF_COMPUTER.length() == 0) {
+            this.computers = new ArrayList<>();
+        } else {
+            this.computers = readFileData();
+        }
+    }
 
     private final ServiceManager serviceManager = new ServiceManager();
     private final ArrayList<Service> services = serviceManager.display();
@@ -214,7 +222,7 @@ public class ComputerManager {
                     choice = scanner.nextInt();
                     if (choice == 1) {
                         c.setStatus("available");
-//                        c.setStartTime(new Date());
+
                         c.startTime();
                         writerFileData(computers);
 

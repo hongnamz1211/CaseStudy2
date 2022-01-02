@@ -66,6 +66,7 @@ public class Computer implements Runnable, Serializable {
     }
 
     public String getUsedTime() {
+
         return usedTime;
     }
 
@@ -90,7 +91,7 @@ public class Computer implements Runnable, Serializable {
     }
 
     public int payment() {
-        return getSecond() * (getPriceOfTime() / 3600) + getPriceOfService();
+        return (getMinute() + 1) * (getPriceOfTime() / 60) + getPriceOfService();
     }
 
 
@@ -105,15 +106,7 @@ public class Computer implements Runnable, Serializable {
 
     private boolean done;
     private int minute;
-    private int second;
 
-    public int getSecond() {
-        return second;
-    }
-
-    public void setSecond(int second) {
-        this.second = second;
-    }
 
     public int getMinute() {
         return minute;
@@ -140,7 +133,6 @@ public class Computer implements Runnable, Serializable {
             endTime = LocalTime.now();
             long duration = Duration.between(startTime, endTime).getSeconds();
             minute = (int) ((duration % 3600) / 60);
-            second = (int) (duration % 60);
             usedTime = String.format("%d:%02d:%02d", duration / 3600, minute, duration % 60);
         }
     }

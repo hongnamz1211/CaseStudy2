@@ -1,3 +1,4 @@
+import _Computer.Computer;
 import _Computer.ComputerManager;
 
 import java.util.Scanner;
@@ -5,6 +6,7 @@ import java.util.Scanner;
 public class TestComputer {
     private static final ComputerManager computerManager = new ComputerManager();
     private static final Scanner scanner = new Scanner(System.in);
+    private static final Computer computer = new Computer();
 
     public static void main(String[] args) {
         int choice;
@@ -17,6 +19,7 @@ public class TestComputer {
             System.out.println("5. thiết lập");
             System.out.println("6. doanh thu tổng");
             System.out.println("7. time");
+            System.out.println("8. thay đổi giá");
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -62,6 +65,11 @@ public class TestComputer {
                     break;
                 case 7:
                     computerManager.time();
+                    break;
+                case 8:
+                    System.out.println("Giá hiện tại");
+                    System.out.println(computer.getPriceOfTime());
+                    computerManager.setupPriceOfTime();
                     break;
             }
         } while (choice != 0);
