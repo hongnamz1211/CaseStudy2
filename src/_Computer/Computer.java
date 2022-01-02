@@ -1,16 +1,18 @@
 package _Computer;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Date;
 
-public class Computer implements Serializable {
+public class Computer implements Runnable, Serializable {
     private int computerName;
-    private boolean status = false;
-    private int priceOfTime;
+    private String status = "disable";
+    private int priceOfTime = 18000;
     private int priceOfService;
-    private int usedTime;
-    private Date startTime;
-    private Date endTime;
+    private String usedTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
     public Computer() {
     }
@@ -19,12 +21,8 @@ public class Computer implements Serializable {
         this.computerName = computerName;
     }
 
-    public Computer(int computerName, boolean status) {
-        this.computerName = computerName;
-        this.status = status;
-    }
 
-    public Computer(int computerName, boolean status, int priceOfTime, int priceOfService, int usedTime, Date startTime, Date endTime) {
+    public Computer(int computerName, String status, int priceOfTime, int priceOfService, String usedTime, LocalTime startTime, LocalTime endTime) {
         this.computerName = computerName;
         this.status = status;
         this.priceOfTime = priceOfTime;
@@ -42,13 +40,12 @@ public class Computer implements Serializable {
         this.computerName = computerName;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
 
-
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -68,48 +65,84 @@ public class Computer implements Serializable {
         this.priceOfService = priceOfService;
     }
 
-    public int getUsedTime() {
+    public String getUsedTime() {
         return usedTime;
     }
 
-    public void setUsedTime(int usedTime) {
+    public void setUsedTime(String usedTime) {
         this.usedTime = usedTime;
     }
 
-    public Date getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
     public int payment() {
-        return this.usedTime * this.priceOfTime + this.priceOfService;
+        return getSecond() * (getPriceOfTime() / 3600) + getPriceOfService();
     }
 
-    public void checkStatus() {
-        if (isStatus()) {
-            System.out.println("Available");
-        } else {
-            System.out.println("Disable");
-        }
-    }
 
     public void displayBored() {
-        System.out.printf("%-10S%-10S%-10S%-10S%-10S", "tên máy", "trạng thái", "thời gian sử dụng (phút)", "dịch vụ", "tổng tiền");
+        System.out.printf("%-20S%-20S%-20S%-20S%-20S", "tên máy", "trạng thái", "thời gian sử dụng", "dịch vụ", "tổng tiền");
         System.out.println();
     }
+
     public void display() {
-        System.out.printf("%-10S%-10S%-10S%-10S%-10S\n", getComputerName(), isStatus(), getUsedTime(), getPriceOfService(), payment());
+        System.out.printf("%-20S%-20S%-20S%-20S%-20S\n", getComputerName(), getStatus(), getUsedTime(), getPriceOfService(), payment());
+    }
+
+    private boolean done;
+    private int minute;
+    private int second;
+
+    public int getSecond() {
+        return second;
+    }
+
+    public void setSecond(int second) {
+        this.second = second;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
+    }
+
+    public void startTime() {
+        Thread thread = new Thread(this);
+        thread.start();
+        done = false;
+    }
+
+    public void stopTime() {
+        done = true;
+    }
+
+    @Override
+    public void run() {
+        startTime = LocalTime.now();
+        while (!done) {
+            endTime = LocalTime.now();
+            long duration = Duration.between(startTime, endTime).getSeconds();
+            minute = (int) ((duration % 3600) / 60);
+            second = (int) (duration % 60);
+            usedTime = String.format("%d:%02d:%02d", duration / 3600, minute, duration % 60);
+        }
     }
 
 

@@ -15,11 +15,17 @@ public class TestComputer {
             System.out.println("3. xóa");
             System.out.println("4. sửa");
             System.out.println("5. thiết lập");
+            System.out.println("6. doanh thu tổng");
+            System.out.println("7. time");
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
                 case 1:
                     computerManager.createComputer();
+                    System.out.println("-----");
+                    System.out.println("Danh sách máy");
+                    computerManager.displayComputer();
+                    System.out.println("-----");
                     break;
                 case 2:
                     computerManager.displayComputer();
@@ -28,15 +34,34 @@ public class TestComputer {
                     System.out.println("Nhập tên máy muốn xóa");
                     int deleteName = scanner.nextInt();
                     computerManager.deleteComputer(deleteName);
+                    System.out.println("-----");
+                    System.out.println("Danh sách máy");
+                    computerManager.displayComputer();
+                    System.out.println("-----");
                     break;
                 case 4:
                     System.out.println("Nhập tên máy mốn sửa");
                     int editName = scanner.nextInt();
                     computerManager.editComputer(editName);
+                    System.out.println("-----");
+                    System.out.println("Danh sách máy");
+                    computerManager.displayComputer();
+                    System.out.println("-----");
                     break;
                 case 5:
                     System.out.println("Thiết lập máy");
                     computerManager.statusComputer();
+                    System.out.println("-----");
+                    System.out.println("Danh sách máy");
+                    computerManager.displayComputer();
+                    System.out.println("-----");
+                    break;
+                case 6:
+                    System.out.println("Tổng doanh thu là");
+                    System.out.println(computerManager.getTurnOver());
+                    break;
+                case 7:
+                    computerManager.time();
                     break;
             }
         } while (choice != 0);

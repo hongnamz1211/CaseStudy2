@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class ComputerManager {
+    private int turnOver = 0;
     private final Scanner scanner = new Scanner(System.in);
     private final ArrayList<Computer> computers = new ArrayList<>();
     private final Computer computer = new Computer();
@@ -17,7 +18,7 @@ public class ComputerManager {
 
 
     private final ServiceManager serviceManager = new ServiceManager();
-//    private final ArrayList<Service> services = serviceManager.readFileData();
+    private final ArrayList<Service> services = serviceManager.display();
 
     public void writerFileData(ArrayList<Computer> serviceData) {
         ioFile.writerFileData(serviceData, PATHNAME_OF_COMPUTER);
@@ -32,6 +33,7 @@ public class ComputerManager {
     }
 
     public void createComputer() {
+        boolean checkComputer = false;
         System.out.println("Nhập số máy thêm");
         int computerName = scanner.nextInt();
         scanner.nextLine();
@@ -39,13 +41,14 @@ public class ComputerManager {
                 computers) {
             if (c.getComputerName() == computerName) {
                 System.out.println("Đã có số máy này. Nhập lại");
-                break;
-            } else {
-                computers.add(new Computer(computerName));
-                writerFileData(computers);
-                System.out.println("-----");
-                System.out.println("Thêm máy số '" + computerName + "' thành công");
+                checkComputer = true;
             }
+        }
+        if (!checkComputer) {
+            computers.add(new Computer(computerName));
+            writerFileData(computers);
+            System.out.println("-----");
+            System.out.println("Thêm máy số '" + computerName + "' thành công");
         }
     }
 
@@ -103,9 +106,9 @@ public class ComputerManager {
     public void statusComputer() {
         System.out.println("Nhập tên máy muốn thao tác");
         int computerName = scanner.nextInt();
-        for (Computer c: computers) {
+        for (Computer c : computers) {
             if (c.getComputerName() == computerName) {
-                if (c.isStatus()) {
+                if (c.getStatus().equals("available")) {
                     computerAvailable(c.getComputerName());
                 } else {
                     computerDisable(c.getComputerName());
@@ -125,16 +128,46 @@ public class ComputerManager {
             System.out.println("-----");
             System.out.println("Nhập lựa chọn");
             choice = scanner.nextInt();
+            scanner.nextLine();
             switch (choice) {
                 case 1:
                     addService(computers);
+                    choice = 0;
                     break;
                 case 2:
                     payment(computers);
+                    choice = 0;
                     break;
             }
         } while (choice != 0);
+    }
 
+    public void addService(int computerName) {
+        int priceOfService = 0;
+        for (Computer c :
+                computers) {
+            if (c.getComputerName() == computerName) {
+                System.out.println("-----");
+                serviceManager.displayService();
+                System.out.println("Nhập tên dịch vụ muốn thêm");
+                String name = scanner.nextLine();
+//                ArrayList<Service> services = serviceManager.display();
+                for (Service s :
+                        services) {
+                    if (s.getServiceName().equals(name)) {
+                        priceOfService += s.getPriceOfService();
+                        System.out.println("Thêm '" + s.getServiceName() + "' vào máy số '" + c.getComputerName() + "' thành công");
+                    }
+                }
+            }
+        }
+        for (Computer c :
+                computers) {
+            if (c.getComputerName() == computerName) {
+                c.setPriceOfService(c.getPriceOfService() + priceOfService);
+            }
+        }
+        writerFileData(computers);
     }
 
     public void payment(int computerName) {
@@ -149,9 +182,15 @@ public class ComputerManager {
                 System.out.println("Nhập lựa chọn");
                 int choice = scanner.nextInt();
                 if (choice == 1) {
-                    c.setEndTime(new Date());
                     System.out.println("Số tiền phải thanh toán '" + c.payment() + "' VNĐ");
-                    c.setStatus(false);
+                    turnOver += c.payment();
+                    c.setStatus("disable");
+                    c.stopTime();
+                    c.setMinute(0);
+                    c.setUsedTime("0");
+                    c.setPriceOfService(0);
+                    c.setPriceOfTime(0);
+                    writerFileData(computers);
                     // thêm bill
                 } else if (choice == 0) {
                     displayComputer();
@@ -160,32 +199,6 @@ public class ComputerManager {
         }
     }
 
-    public void addService(int computerName) {
-        int priceOfService = 0;
-        for (Computer c :
-                computers) {
-            if (c.getComputerName() == computerName) {
-                System.out.println("-----");
-                serviceManager.displayService();
-                System.out.println("Nhập tên dịch vụ muốn thêm");
-                String name = scanner.nextLine();
-                ArrayList<Service> services = serviceManager.display();
-                for (Service s:
-                     services) {
-                    if (s.getServiceName().equals(name)) {
-                        priceOfService += c.getPriceOfService();
-                        System.out.println("Thêm '" + s.getServiceName() + "' vào máy số '" + c.getComputerName() + "' thành công");
-                    }
-                }
-            }
-        }
-        for (Computer c :
-                computers) {
-            if (c.getComputerName() == computerName) {
-                c.setPriceOfService(priceOfService);
-            }
-        }
-    }
 
     public void computerDisable(int computerName) {
         for (Computer c :
@@ -200,15 +213,52 @@ public class ComputerManager {
                     System.out.println("-----");
                     choice = scanner.nextInt();
                     if (choice == 1) {
-                        c.setStatus(true);
-                        c.setStartTime(new Date());
+                        c.setStatus("available");
+//                        c.setStartTime(new Date());
+                        c.startTime();
                         writerFileData(computers);
+
 
 //                            c.start();
                         System.out.println("Bật máy số '" + c.getComputerName() + "' thành công");
                         break;
                     }
                 } while (choice != 0);
+            }
+        }
+    }
+
+    public void setupPriceOfTime() {
+        int choice;
+        System.out.println("Giá tiền 1h hiện tại");
+        System.out.println(computer.getPriceOfTime());
+        System.out.println("Nhập giá muốn thay đổi");
+        int priceOfTime = scanner.nextInt();
+        System.out.println("Xác nhận thay đổi");
+        System.out.println("1. Xác nhận");
+        System.out.println("0. Quay lại");
+        System.out.println("Nhập lựa chọn");
+        choice = scanner.nextInt();
+        scanner.nextLine();
+        if (choice == 1) {
+            computer.setPriceOfTime(priceOfTime);
+            System.out.println("Thay đổi giá thành '" + priceOfTime + "'/1h thành công");
+        }
+        // yêu cầu thanh toán hết trước khi thay đổi giá.
+    }
+
+    public int getTurnOver() {
+        return turnOver;
+    }
+
+    public void time() {
+        System.out.println("số máy");
+        int computerName = scanner.nextInt();
+        for (Computer c :
+                computers) {
+            if (c.getComputerName() == computerName) {
+                System.out.println(c.getUsedTime());
+                System.out.println(c.getMinute());
             }
         }
     }
