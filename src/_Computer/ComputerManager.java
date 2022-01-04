@@ -5,8 +5,9 @@ import _Service.Service;
 import _Service.ServiceManager;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 public class ComputerManager {
@@ -15,7 +16,8 @@ public class ComputerManager {
     private final ArrayList<Computer> computers;
     private final Computer computer = new Computer();
     private final IOFile<Computer> ioFile = new IOFile<>();
-    private final File PATHNAME_OF_COMPUTER =  new File("src/File/computer");
+    private final File PATHNAME_OF_COMPUTER = new File("src/File/computer");
+
 
     public ComputerManager() {
         if (PATHNAME_OF_COMPUTER.length() == 0) {
@@ -50,6 +52,7 @@ public class ComputerManager {
             if (c.getComputerName() == computerName) {
                 System.out.println("Đã có số máy này. Nhập lại");
                 checkComputer = true;
+                break;
             }
         }
         if (!checkComputer) {
@@ -61,12 +64,14 @@ public class ComputerManager {
     }
 
     public void displayComputer() {
+        writerFileData(computers);
         ArrayList<Computer> computers = display();
         computer.displayBored();
         for (Computer c :
                 computers) {
             c.display();
         }
+
     }
 
     public void deleteComputer(int computerName) {
@@ -209,6 +214,7 @@ public class ComputerManager {
 
 
     public void computerDisable(int computerName) {
+
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
@@ -222,12 +228,10 @@ public class ComputerManager {
                     choice = scanner.nextInt();
                     if (choice == 1) {
                         c.setStatus("available");
-
+                        c.setUsedTime("0:00:01");
                         c.startTime();
+//                        saveStartTime = LocalTime.now();
                         writerFileData(computers);
-
-
-//                            c.start();
                         System.out.println("Bật máy số '" + c.getComputerName() + "' thành công");
                         break;
                     }
@@ -252,7 +256,7 @@ public class ComputerManager {
             computer.setPriceOfTime(priceOfTime);
             System.out.println("Thay đổi giá thành '" + priceOfTime + "'/1h thành công");
         }
-        // yêu cầu thanh toán hết trước khi thay đổi giá.
+        // yêu cầu tắt hết máy khi thay đổi giá.
     }
 
     public int getTurnOver() {
@@ -269,5 +273,7 @@ public class ComputerManager {
                 System.out.println(c.getMinute());
             }
         }
+        writerFileData(computers);
     }
+
 }

@@ -10,9 +10,15 @@ public class Computer implements Runnable, Serializable {
     private String status = "disable";
     private int priceOfTime = 18000;
     private int priceOfService;
-    private String usedTime;
+    private String usedTime = "0";
     private LocalTime startTime;
     private LocalTime endTime;
+
+    public Computer(int computerName, String status, String usedTime) {
+        this.computerName = computerName;
+        this.status = status;
+        this.usedTime = usedTime;
+    }
 
     public Computer() {
     }
@@ -66,7 +72,6 @@ public class Computer implements Runnable, Serializable {
     }
 
     public String getUsedTime() {
-
         return usedTime;
     }
 
@@ -91,9 +96,10 @@ public class Computer implements Runnable, Serializable {
     }
 
     public int payment() {
-        return (getMinute() + 1) * (getPriceOfTime() / 60) + getPriceOfService();
+        return getMinute() * (getPriceOfTime() / 60) + getPriceOfService();
     }
 
+//    private final ComputerManager computerManager = new ComputerManager();
 
     public void displayBored() {
         System.out.printf("%-20S%-20S%-20S%-20S%-20S", "tên máy", "trạng thái", "thời gian sử dụng", "dịch vụ", "tổng tiền");
@@ -106,7 +112,32 @@ public class Computer implements Runnable, Serializable {
 
     private boolean done;
     private int minute;
+    private LocalTime timeNow;
+    private String usedTimeNow = "0";
 
+    public String getUsedTimeNow() {
+        return usedTimeNow;
+    }
+
+    public void setUsedTimeNow(String usedTimeNow) {
+        this.usedTimeNow = usedTimeNow;
+    }
+
+    public LocalTime getTimeNow() {
+        return timeNow;
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
+    public void setTimeNow(LocalTime timeNow) {
+        this.timeNow = timeNow;
+    }
 
     public int getMinute() {
         return minute;
@@ -137,5 +168,31 @@ public class Computer implements Runnable, Serializable {
         }
     }
 
-
+//    public String writeUser() {
+//        return getComputerName() + ", " + getUsedTime() + ", " + payment() + ", " + getStartTime() + ", " + getEndTime();
+//    }
+//
+//    private int hour = 0;
+//    private int minute = 0;
+//    private int second = 0;
+//    private final String abc = hour + ":" + minute + ":" + second;
+//
+//    @Override
+//    public void run() {
+//        while (getStatus().equals("available")) {
+//            try {
+//                Thread.sleep(1000);
+//                this.second++;
+//                if (this.second == 60) {
+//                    this.second = 0;
+//                    this.minute++;
+//                } else if (this.minute == 60) {
+//                    this.minute = 0;
+//                    this.hour++;
+//                }
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }

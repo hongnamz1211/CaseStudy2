@@ -51,15 +51,19 @@ public class ServiceManager {
         writerFileData(services);
         System.out.println("-----");
         System.out.println("Thêm '" + serviceName + "' thành công");
+        displayService();
     }
 
 
     public void displayService() {
+        System.out.println("-----");
+        System.out.println("Bảng dịch vụ");
         ArrayList<Service> services = display();
         for (Service s :
                 services) {
             s.display();
         }
+        System.out.println("-----");
     }
 
     public void deleteService(String name) {
@@ -74,6 +78,7 @@ public class ServiceManager {
             services.remove(service);
             writerFileData(services);
             System.out.println("Xóa '" + service.getServiceName() + "' thành công");
+            displayService();
         }
     }
 
@@ -104,6 +109,7 @@ public class ServiceManager {
             services.set(index, service);
             writerFileData(services);
             System.out.println("Cập nhật '" + serviceName + "' thành công");
+            displayService();
         }
     }
 }

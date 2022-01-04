@@ -20,6 +20,7 @@ public class TestComputer {
             System.out.println("6. doanh thu tổng");
             System.out.println("7. time");
             System.out.println("8. thay đổi giá");
+            System.out.println("9.time now");
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -71,6 +72,7 @@ public class TestComputer {
                     System.out.println(computer.getPriceOfTime());
                     computerManager.setupPriceOfTime();
                     break;
+
             }
         } while (choice != 0);
     }
