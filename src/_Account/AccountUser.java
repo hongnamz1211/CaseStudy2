@@ -1,6 +1,8 @@
 package _Account;
 
-public class AccountUser {
+import java.io.Serializable;
+
+public class AccountUser implements Serializable {
     private String userAcc;
     private String userPass;
 
@@ -29,20 +31,12 @@ public class AccountUser {
     }
 
     public void displayBored() {
-        System.out.println("TÀI KHOẢN ĐĂNG NHẬP USER");
         System.out.printf("%-20S%-20S", "tài khoản", "mật khẩu");
         System.out.println();
     }
 
     public void display() {
-        System.out.printf("%-20s%-20s", getUserAcc(), getUserPass());
+        System.out.printf("%-20s%-20s\n", getUserAcc(), getUserPass());
     }
 
-    @Override
-    public String toString() {
-        return "AccountUser{" +
-                "userAcc='" + userAcc + '\'' +
-                ", userPass='" + userPass + '\'' +
-                '}';
-    }
 }

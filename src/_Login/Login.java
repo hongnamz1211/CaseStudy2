@@ -1,7 +1,9 @@
 package _Login;
 
+import _Account.AccAdminManager;
 import _Account.AccountAdmin;
 import _ManagerAdmin.MenuManager;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -10,13 +12,17 @@ public class Login {
     private final Scanner scanner = new Scanner(System.in);
     private final ArrayList<AccountAdmin> accountAdmins = new ArrayList<>();
     private final MenuManager menuManager = new MenuManager();
+    private final AccAdminManager accAdminManager = new AccAdminManager();
+    private final AccountAdmin accountAdmin = new AccountAdmin();
 
 
     public Login() {
     }
 
+
     public void loginSystems() {
         try {
+            addAccount();
             menuLogin();
         } catch (InputMismatchException e) {
             System.out.println();
@@ -28,6 +34,7 @@ public class Login {
     }
 
     private void menuLogin() {
+//        addAccount();
         System.out.println("1. Đăng nhập");
         System.out.println("2. Quên mật khẩu");
         System.out.println("Nhập lựa chọn");
@@ -45,6 +52,10 @@ public class Login {
         }
     }
 
+    private void addAccount() {
+        writeAccountAdmin("admin", "12345", "0868886855");
+    }
+
 
     private void loginManager() {
         System.out.println("ĐĂNG NHẬP HỆ THỐNG QUẢN LÝ");
@@ -56,29 +67,12 @@ public class Login {
     }
 
     private void forgotPassword(String phoneNumber) {
-        AccountAdmin accountAdmin = null;
-        for (AccountAdmin a :
-                accountAdmins) {
-            if (a.getPhoneNumber().equals(phoneNumber)) {
-                accountAdmin = a;
-            }
-        }
-        if (accountAdmin != null) {
-            int index = accountAdmins.indexOf(accountAdmin);
-            System.out.println("Nhập tài khoản mới");
-            String adminAcc = scanner.nextLine();
-            accountAdmin.setAdminAcc(adminAcc);
-            System.out.println("Nhập mật khẩu mới");
-            String adminPass = scanner.nextLine();
-            scanner.nextLine();
-            accountAdmin.setAdminPass(adminPass);
-            accountAdmins.set(index,accountAdmin);
-            System.out.println("Cập nhật tài khoản thành công");
-        } else {
-            System.out.println("Sai số điện thoại! Vui lòng nhập lại");
-            menuLogin();
-        }
-
+        System.out.println("Nhập tài khoản mới");
+        String adminAcc = scanner.nextLine();
+        System.out.println("Nhập mật khẩu mới");
+        String adminPass = scanner.nextLine();
+        writeAccountAdmin(adminAcc, adminPass, phoneNumber);
+        checkPhoneNumber(phoneNumber);
     }
 
     private void checkAcc(String adminAcc, String adminPass) {
@@ -94,7 +88,26 @@ public class Login {
             }
         } catch (IndexOutOfBoundsException e) {
             System.out.println();
-            System.out.println("Đăng nhập thất bại! Vui lòng kiểm tra lại");
+            System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại");
+            System.out.println();
+            menuLogin();
+        }
+    }
+
+    private void checkPhoneNumber(String phoneNumber) {
+        try {
+            if (checkPhoneNumberAdmin(phoneNumber)) {
+                System.out.println();
+                System.out.println("Cập nhật tài khoản thành công! Vui lòng đăng nhập lại");
+                System.out.println();
+                loginManager();
+            } else {
+                System.out.println("Sai thông tin số điện thoại! Vui lòng nhập lại!");
+                menuLogin();
+            }
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println();
+            System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại");
             System.out.println();
             menuLogin();
         }
@@ -102,12 +115,27 @@ public class Login {
 
     private boolean checkAccAdminInLogin(String adminAcc, String adminPass) {
         for (AccountAdmin a :
-                accountAdmins) {
+                accAdminManager.getAccountAdmins()) {
             boolean checkAccount = adminAcc.equals(a.getAdminAcc()) && adminPass.equals(a.getAdminPass());
             if (checkAccount) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean checkPhoneNumberAdmin(String phoneNumber) {
+        for (AccountAdmin a :
+                accAdminManager.getAccountAdmins()) {
+            boolean checkPhoneNumber = phoneNumber.equals(a.getPhoneNumber());
+            if (checkPhoneNumber) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void writeAccountAdmin(String adminAcc, String adminPass, String phoneNumber) {
+        accAdminManager.setListAdmin(adminAcc, adminPass, "0868886855");
     }
 }

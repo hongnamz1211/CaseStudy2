@@ -45,18 +45,13 @@ public class Service implements Serializable {
         this.quantityOfService = quantityOfService;
     }
 
-    @Override
-    public String toString() {
-        return "Service{" +
-                "serviceName='" + serviceName + '\'' +
-                ", priceOfService=" + priceOfService +
-                '}';
-    }
-
-
-    public void display() {
-        System.out.printf("%-10S%-10S", "tên dịch vụ: ", getServiceName());
-        System.out.printf("%-10S%-10S", "giá tiền: ", getPriceOfService());
+    public void displayBored() {
+        System.out.printf("%-20S%-20S", "tên dịch vụ", "giá tiền");
         System.out.println();
     }
+
+    public void display() {
+        System.out.printf("%-20s%-20s\n", getServiceName(), getPriceOfService());
+    }
+
 }

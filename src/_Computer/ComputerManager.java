@@ -5,8 +5,6 @@ import _Service.Service;
 import _Service.ServiceManager;
 
 import java.io.File;
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,6 +13,10 @@ public class ComputerManager {
     private final Scanner scanner = new Scanner(System.in);
     private final ArrayList<Computer> computers;
     private final Computer computer = new Computer();
+
+    private final ServiceManager serviceManager = new ServiceManager();
+    private final ArrayList<Service> services = serviceManager.display();
+
     private final IOFile<Computer> ioFile = new IOFile<>();
     private final File PATHNAME_OF_COMPUTER = new File("src/File/computer");
 
@@ -26,9 +28,6 @@ public class ComputerManager {
             this.computers = readFileData();
         }
     }
-
-    private final ServiceManager serviceManager = new ServiceManager();
-    private final ArrayList<Service> services = serviceManager.display();
 
     public void writerFileData(ArrayList<Computer> serviceData) {
         ioFile.writerFileData(serviceData, PATHNAME_OF_COMPUTER);
@@ -60,18 +59,21 @@ public class ComputerManager {
             writerFileData(computers);
             System.out.println("-----");
             System.out.println("Thêm máy số '" + computerName + "' thành công");
+            displayComputer();
         }
     }
 
     public void displayComputer() {
         writerFileData(computers);
+        System.out.println("-----");
+        System.out.println("Danh sách máy");
         ArrayList<Computer> computers = display();
         computer.displayBored();
         for (Computer c :
                 computers) {
             c.display();
         }
-
+        System.out.println("-----");
     }
 
     public void deleteComputer(int computerName) {
@@ -86,6 +88,7 @@ public class ComputerManager {
             computers.remove(computer);
             writerFileData(computers);
             System.out.println("Xóa máy số '" + computer.getComputerName() + "' thành công");
+            displayComputer();
         }
     }
 
@@ -113,6 +116,7 @@ public class ComputerManager {
             computers.set(index, computer);
             writerFileData(computers);
             System.out.println("Cập nhật máy số '" + computer.getComputerName() + "' thành công");
+            displayComputer();
         }
     }
 
@@ -164,7 +168,6 @@ public class ComputerManager {
                 serviceManager.displayService();
                 System.out.println("Nhập tên dịch vụ muốn thêm");
                 String name = scanner.nextLine();
-//                ArrayList<Service> services = serviceManager.display();
                 for (Service s :
                         services) {
                     if (s.getServiceName().equals(name)) {
@@ -181,6 +184,7 @@ public class ComputerManager {
             }
         }
         writerFileData(computers);
+        displayComputer();
     }
 
     public void payment(int computerName) {
@@ -196,6 +200,7 @@ public class ComputerManager {
                 int choice = scanner.nextInt();
                 if (choice == 1) {
                     System.out.println("Số tiền phải thanh toán '" + c.payment() + "' VNĐ");
+
                     turnOver += c.payment();
                     c.setStatus("disable");
                     c.stopTime();
@@ -204,6 +209,7 @@ public class ComputerManager {
                     c.setPriceOfService(0);
                     c.setPriceOfTime(0);
                     writerFileData(computers);
+                    displayComputer();
                     // thêm bill
                 } else if (choice == 0) {
                     displayComputer();
@@ -233,6 +239,7 @@ public class ComputerManager {
 //                        saveStartTime = LocalTime.now();
                         writerFileData(computers);
                         System.out.println("Bật máy số '" + c.getComputerName() + "' thành công");
+                        displayComputer();
                         break;
                     }
                 } while (choice != 0);
@@ -275,5 +282,4 @@ public class ComputerManager {
         }
         writerFileData(computers);
     }
-
 }

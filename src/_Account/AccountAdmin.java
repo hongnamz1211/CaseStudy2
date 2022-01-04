@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class AccountAdmin implements Serializable {
     private String adminAcc;
     private String adminPass;
-    private final String phoneNumber = "0868886855";
+    private String phoneNumber;
 
     public AccountAdmin() {
     }
@@ -14,6 +14,12 @@ public class AccountAdmin implements Serializable {
     public AccountAdmin(String adminAcc, String adminPass) {
         this.adminAcc = adminAcc;
         this.adminPass = adminPass;
+    }
+
+    public AccountAdmin(String adminAcc, String adminPass, String phoneNumber) {
+        this.adminAcc = adminAcc;
+        this.adminPass = adminPass;
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAdminAcc() {
@@ -24,12 +30,12 @@ public class AccountAdmin implements Serializable {
         this.adminAcc = adminAcc;
     }
 
-    public void setAdminPass(String adminPass) {
-        this.adminPass = adminPass;
-    }
-
     public String getAdminPass() {
         return adminPass;
+    }
+
+    public void setAdminPass(String adminPass) {
+        this.adminPass = adminPass;
     }
 
     public String getPhoneNumber() {
