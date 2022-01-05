@@ -4,8 +4,6 @@ import _ReadWriteFile.IOFile;
 import _Service.Service;
 
 import java.io.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -16,7 +14,7 @@ public class Manager {
     private int turnOver = 0;
     private final Scanner scanner = new Scanner(System.in);
     private final ArrayList<Computer> computers = new ArrayList<>();
-    private final ArrayList<Service> services = new ArrayList<>();
+
     private final Computer computer = new Computer();
     private final Service service = new Service();
 
@@ -26,6 +24,8 @@ public class Manager {
     private final File PATHNAME_OF_SERVICE = new File("src/File/service");
     private final File PATHNAME_OF_TURNOVER = new File("src/File/turnOver.csv");
     private final File PATHNAME_OF_TRADE = new File("src/File/trade.csv");
+
+    private final ArrayList<Service> services = ioFileService.readFileData(PATHNAME_OF_SERVICE);
 
     public void createComputer() {
         boolean checkComputer = false;
@@ -56,7 +56,6 @@ public class Manager {
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
             System.out.println("-----");
             System.out.println("Danh sách máy");
-//        ArrayList<Computer> computers = ioFileComputer.readFileData(computers);
             computer.displayBored();
             for (Computer c :
                     computers) {
@@ -192,16 +191,15 @@ public class Manager {
                 scanner.nextLine();
                 if (choice == 1) {
                     System.out.println("Số tiền phải thanh toán '" + c.payment() + "' VNĐ");
-
                     turnOver += c.payment();
-                    writeTrade(c);
-                    c.setStatus("disable");
-                    c.setEndUsed(LocalDate.now());
                     c.stopTime();
-//                    c.setMinute(0);
-                    c.setUsedTime("0");
+                    c.setMinute(0);
+//                    c.setUsedTime("0:00:00");
+                    c.setStatus("disable");
                     c.setPriceOfService(0);
                     c.setPriceOfTime(0);
+                    c.setEndUsed(new Date());
+                    writeTrade(c);
                     ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
                     displayComputer();
                     // thêm bill
@@ -230,9 +228,8 @@ public class Manager {
                     if (choice == 1) {
                         c.setStatus("available");
                         c.setUsedTime("0:00:01");
-                        c.setStartUsed(LocalDate.now());
+                        c.setStartUsed(new Date());
                         c.startTime();
-//                        saveStartTime = LocalTime.now();
                         ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
                         System.out.println("Bật máy số '" + c.getComputerName() + "' thành công");
                         displayComputer();
@@ -266,42 +263,8 @@ public class Manager {
         return turnOver;
     }
 
-    public void time() {
-        System.out.println("số máy");
-        int computerName = scanner.nextInt();
-        for (Computer c :
-                computers) {
-            if (c.getComputerName() == computerName) {
-                System.out.println(c.getUsedTime());
-                System.out.println(c.getMinute());
-            }
-        }
-        ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-    }
 
     public void createService() {
-//        boolean checkService = false;
-//        System.out.println("Nhập tên dịch vụ");
-//        String serviceName = scanner.nextLine();
-//        for (Service s :
-//                services) {
-//            if (s.getServiceName().equals(serviceName)) {
-//                System.out.println("Đã có dịch vụ này");
-//                checkService = true;
-//                break;
-//            }
-//        }
-//        if (!checkService) {
-//            System.out.println("Nhập giá dịch vụ");
-//            int priceOfService = scanner.nextInt();
-//            scanner.nextLine();
-//            Service service = new Service(serviceName, priceOfService);
-//            services.add(service);
-//            System.out.println("-----");
-//            System.out.println("Thêm '" + serviceName + "' thành công");
-//        }
-//        writerFileData(services);
-//        displayService();
         boolean checkService = false;
         System.out.println("Nhập tên dịch vụ");
         String serviceName = scanner.nextLine();

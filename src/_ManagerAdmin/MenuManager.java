@@ -1,22 +1,21 @@
 package _ManagerAdmin;
 
+import _Account.AccAdminManager;
 import _Account.AccUserManager;
+import _Account.AccountAdmin;
 import _Computer.Computer;
-//import _Computer.ComputerManager;
 import _Computer.Manager;
 import _Login.Login;
-//import _Service.ServiceManager;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuManager {
     private final Scanner scanner = new Scanner(System.in);
-//    private final ComputerManager computerManager = new ComputerManager();
     private final Computer computer = new Computer();
-//    private final ServiceManager serviceManager = new ServiceManager();
     private final AccUserManager accUserManager = new AccUserManager();
-//    private final Login login = new Login();
+    private final AccAdminManager accAdminManager = new AccAdminManager();
+    private final AccountAdmin accountAdmin = new AccountAdmin();
 
     public MenuManager() {
     }
@@ -121,7 +120,7 @@ public class MenuManager {
                         accUserManager.accUserManager();
                         break;
                     case 4:
-                        //accAminManager
+                        accountAdmin.display();
                         break;
                     case 5:
                         manager.setupPriceOfTime();
@@ -164,9 +163,9 @@ public class MenuManager {
                     case 15:
                         manager.turnOverAll();
                         break;
-                    case 0:
-                        System.exit(0);
-                        break;
+//                    case 0:
+//                        login.menuLogin();
+//                        break;
                     default:
                         System.out.println("Lựa chọn không đúng! Vui lòng nhập lại!");
                         break;
@@ -177,6 +176,7 @@ public class MenuManager {
             System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại");
             System.out.println();
             scanner.nextLine();
+            menuManager();
         }
     }
 }

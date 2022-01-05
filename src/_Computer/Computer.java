@@ -2,7 +2,6 @@ package _Computer;
 
 import java.io.Serializable;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -11,11 +10,11 @@ public class Computer implements Runnable, Serializable {
     private String status = "disable";
     private int priceOfTime = 18000;
     private int priceOfService;
-    private String usedTime = "0";
+    private String usedTime = "0:00:00";
     private LocalTime startTime;
     private LocalTime endTime;
-    private LocalDate startUsed;
-    private LocalDate endUsed;
+    private Date startUsed;
+    private Date endUsed;
 
     public Computer(int computerName, String status, String usedTime) {
         this.computerName = computerName;
@@ -102,8 +101,6 @@ public class Computer implements Runnable, Serializable {
         return getMinute() * (getPriceOfTime() / 60) + getPriceOfService();
     }
 
-//    private final ComputerManager computerManager = new ComputerManager();
-
     public void displayBored() {
         System.out.printf("%-20S%-20S%-20S%-20S%-20S", "tên máy", "trạng thái", "thời gian sử dụng", "dịch vụ", "tổng tiền");
         System.out.println();
@@ -113,38 +110,24 @@ public class Computer implements Runnable, Serializable {
         System.out.printf("%-20S%-20S%-20S%-20S%-20S\n", getComputerName(), getStatus(), getUsedTime(), getPriceOfService(), payment());
     }
 
-    public LocalDate getStartUsed() {
+    public Date getStartUsed() {
         return startUsed;
     }
 
-    public void setStartUsed(LocalDate startUsed) {
+    public void setStartUsed(Date startUsed) {
         this.startUsed = startUsed;
     }
 
-    public LocalDate getEndUsed() {
+    public Date getEndUsed() {
         return endUsed;
     }
 
-    public void setEndUsed(LocalDate endUsed) {
+    public void setEndUsed(Date endUsed) {
         this.endUsed = endUsed;
     }
 
     private boolean done;
     private int minute;
-//    private LocalTime timeNow;
-//    private String usedTimeNow = "0";
-
-//    public String getUsedTimeNow() {
-//        return usedTimeNow;
-//    }
-//
-//    public void setUsedTimeNow(String usedTimeNow) {
-//        this.usedTimeNow = usedTimeNow;
-//    }
-//
-//    public LocalTime getTimeNow() {
-//        return timeNow;
-//    }
 
     public boolean isDone() {
         return done;
@@ -153,10 +136,6 @@ public class Computer implements Runnable, Serializable {
     public void setDone(boolean done) {
         this.done = done;
     }
-
-//    public void setTimeNow(LocalTime timeNow) {
-//        this.timeNow = timeNow;
-//    }
 
     public int getMinute() {
         return minute;
