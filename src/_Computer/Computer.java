@@ -102,12 +102,15 @@ public class Computer implements Runnable, Serializable {
     }
 
     public void displayBored() {
-        System.out.printf("%-20S%-20S%-20S%-20S%-20S", "tên máy", "trạng thái", "thời gian sử dụng", "dịch vụ", "tổng tiền");
-        System.out.println();
+        System.out.println("┎───[TÊN MÁY]────────┬───[TRẠNG THÁI]────────┬───[THỜI GIAN]────────┬───[DỊCH VỤ]────────┬───[TỔNG TIỀN]────────┒");
     }
 
     public void display() {
-        System.out.printf("%-20S%-20S%-20S%-20S%-20S\n", getComputerName(), getStatus(), getUsedTime(), getPriceOfService(), payment());
+        System.out.printf("%1S%30S%24S%20S%22S\n","┠    " + getComputerName(), getStatus(), getUsedTime(), getPriceOfService(), payment());
+    }
+
+    public void displayBoredBot() {
+        System.out.println("┖────────────────────┴───────────────────────┴──────────────────────┴────────────────────┴──────────────────────┚");
     }
 
     public Date getStartUsed() {
@@ -163,6 +166,9 @@ public class Computer implements Runnable, Serializable {
             long duration = Duration.between(startTime, endTime).getSeconds();
             minute = (int) ((duration % 3600) / 60);
             usedTime = String.format("%d:%02d:%02d", duration / 3600, minute, duration % 60);
+        }
+        if (done) {
+            usedTime = "0:00:00";
         }
     }
 

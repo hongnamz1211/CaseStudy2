@@ -4,6 +4,7 @@ import _ReadWriteFile.IOFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AccUserManager {
@@ -35,70 +36,87 @@ public class AccUserManager {
     }
 
     public void accUserManager() {
-        int choice;
-        do {
-            System.out.println("Quản lý tài khoản người dùng");
-            System.out.println("1. Hiển thị danh sách tài khoản");
-            System.out.println("2. Thêm tài khoản");
-            System.out.println("3. Sửa tài khoản");
-            System.out.println("4. Xóa tài khoản");
-            System.out.println("0. Quay lại");
-            System.out.println("-----");
-            System.out.println("Nhập lựa chọn");
-            choice = scanner.nextInt();
-            scanner.nextLine();
-            switch (choice) {
-                case 1:
-                    displayAccUser();
-                    break;
-                case 2:
-                    createAccUser();
-                    break;
-                case 3:
-                    System.out.println("Nhập tên tài khoản muốn sửa");
-                    String accEdit = scanner.nextLine();
-                    editAccUser(accEdit);
-                    break;
-                case 4:
-                    System.out.println("Nhập tên tài khoản muốn xóa");
-                    String accDel = scanner.nextLine();
-                    deleteAccUser(accDel);
-                    break;
-            }
-        } while (choice != 0);
+        try {
+            int choice;
+            do {
+                System.out.println("┎─────[Quản lý tài khoản người dùng]──────────┒");
+                System.out.println("┠     1. Hiển thị danh sách tài khoản         ┨");
+                System.out.println("┠     2. Thêm tài khoản                       ┨");
+                System.out.println("┠     3. Sửa tài khoản                        ┨");
+                System.out.println("┠     4. Xóa tài khoản                        ┨");
+                System.out.println("┠     0. Quay lại                             ┨");
+                System.out.println("┖─────────────────────────────────────────────┚");
+                System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        displayAccUser();
+                        break;
+                    case 2:
+                        createAccUser();
+                        break;
+                    case 3:
+                        System.out.println("Nhập tên tài khoản muốn sửa");
+                        String accEdit = scanner.nextLine();
+                        editAccUser(accEdit);
+                        break;
+                    case 4:
+                        System.out.println("Nhập tên tài khoản muốn xóa");
+                        String accDel = scanner.nextLine();
+                        deleteAccUser(accDel);
+                        break;
+                    default:
+                        System.out.println("[\uD83D\uDD14] Lựa chọn không đúng! Vui lòng nhập lại!");
+                        break;
+                }
+            } while (choice != 0);
+        } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
+            System.out.println();
+            accUserManager();
+        }
+
     }
 
-    public AccountUser createAccUser() {
+    public void createAccUser() {
+        boolean checkAccUser = false;
         System.out.println("Nhập tài khoản");
         String userAcc = scanner.nextLine();
         for (AccountUser a :
                 accountUsers) {
             if (a.getUserAcc().equals(userAcc)) {
-                System.out.println("Trùng tên tài khoản! Vui lòng nhập lại");
-                return null;
+                System.out.println("[\uD83D\uDD14] Trùng tên tài khoản! Vui lòng nhập lại");
+                checkAccUser = true;
+                break;
             }
         }
-        System.out.println("Nhập mật khẩu");
-        String userPass = scanner.nextLine();
-        AccountUser accountUser = new AccountUser(userAcc, userPass);
-        accountUsers.add(accountUser);
-        writeFileData(accountUsers);
-        System.out.println("-----");
-        System.out.println("Thêm tài khoản '" + userAcc + "' thành công");
-        displayAccUser();
-        return accountUser;
+        if (!checkAccUser) {
+            System.out.println("Nhập mật khẩu");
+            String userPass = scanner.nextLine();
+            AccountUser accountUser = new AccountUser(userAcc, userPass);
+            accountUsers.add(accountUser);
+            writeFileData(accountUsers);
+            System.out.println("-----");
+            System.out.println("[\uD83D\uDD14] Thêm tài khoản '" + userAcc + "' thành công");
+            displayAccUser();
+        }
+
+
     }
 
     public void displayAccUser() {
         writeFileData(accountUsers);
         System.out.println("-----");
-        System.out.println("Danh sách tài khoản");
+        System.out.println("DANH SÁCH TÀI KHOẢN");
         ArrayList<AccountUser> accountUsers = display();
         accountUser.displayBored();
         for (AccountUser a :
                 accountUsers) {
             a.display();
         }
+        accountUser.displayBoredBot();
         System.out.println("-----");
     }
 
@@ -113,12 +131,13 @@ public class AccUserManager {
         if (accountUser != null) {
             accountUsers.remove(accountUser);
             writeFileData(accountUsers);
-            System.out.println("Xóa tài khoản '" + userAcc + "' thành công");
+            System.out.println("[\uD83D\uDD14] Xóa tài khoản '" + userAcc + "' thành công");
             displayAccUser();
         }
     }
 
     public void editAccUser(String editUserAcc) {
+        boolean checkAccUser = false;
         AccountUser accountUser = null;
         for (AccountUser a :
                 accountUsers) {
@@ -133,18 +152,21 @@ public class AccUserManager {
             for (AccountUser a :
                     accountUsers) {
                 if (a.getUserAcc().equals(userAcc)) {
-                    System.out.println("Trùng tên tài khoản! Vui lòng nhập lại");
+                    System.out.println("[\uD83D\uDD14] Trùng tên tài khoản! Vui lòng nhập lại");
+                    checkAccUser = true;
                     break;
                 }
             }
-            accountUser.setUserAcc(userAcc);
-            System.out.println("Nhập mật khẩu");
-            String userPass = scanner.nextLine();
-            accountUser.setUserPass(userPass);
-            accountUsers.set(index, accountUser);
-            writeFileData(accountUsers);
-            System.out.println("Thay đổi tài khoản '" + userAcc + "' thành công");
-            displayAccUser();
+            if (!checkAccUser) {
+                accountUser.setUserAcc(userAcc);
+                System.out.println("Nhập mật khẩu");
+                String userPass = scanner.nextLine();
+                accountUser.setUserPass(userPass);
+                accountUsers.set(index, accountUser);
+                writeFileData(accountUsers);
+                System.out.println("[\uD83D\uDD14] Thay đổi tài khoản '" + userAcc + "' thành công");
+                displayAccUser();
+            }
         }
     }
 }

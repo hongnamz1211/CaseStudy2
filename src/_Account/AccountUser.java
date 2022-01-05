@@ -31,12 +31,14 @@ public class AccountUser implements Serializable {
     }
 
     public void displayBored() {
-        System.out.printf("%-20S%-20S", "tài khoản", "mật khẩu");
-        System.out.println();
+        System.out.println("┎───[TÀI KHOẢN]─────────┬───[MẬT KHẨU]─────────┒");
     }
 
-    public void display() {
-        System.out.printf("%-20s%-20s\n", getUserAcc(), getUserPass());
+    public void  display() {
+        System.out.printf("%4s%23s\n", "┠    " + getUserAcc(), getUserPass());
     }
 
+    public void displayBoredBot() {
+        System.out.println("┖────────────────────────┴─────────────────────┚");
+    }
 }

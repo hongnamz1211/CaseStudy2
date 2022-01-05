@@ -1,4 +1,4 @@
-package _Service;
+package _Computer;
 
 import java.io.Serializable;
 
@@ -46,12 +46,15 @@ public class Service implements Serializable {
     }
 
     public void displayBored() {
-        System.out.printf("%-20S%-20S", "tên dịch vụ", "giá tiền");
-        System.out.println();
+        System.out.println("┎───[TÊN DỊCH VỤ]────────┬───[GIÁ TIỀN]────────┒");
     }
 
     public void display() {
-        System.out.printf("%-20s%-20s\n", getServiceName(), getPriceOfService());
+        System.out.printf("%4s", "┠    " + getServiceName());
+        System.out.printf("%25s\n", getPriceOfService());
     }
 
+    public void displayBoredBot() {
+        System.out.println("┖────────────────────────┴─────────────────────┚");
+    }
 }

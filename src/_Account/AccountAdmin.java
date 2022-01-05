@@ -46,7 +46,7 @@ public class AccountAdmin implements Serializable {
         System.out.println("TÀI KHOẢN ĐĂNG NHẬP ADMIN");
         System.out.printf("%-20S%-20S%-20S", "tài khoản", "mật khẩu", "số điện thoại");
         System.out.println();
-        System.out.printf("%-20s%-20s%-20s", getAdminAcc(), getAdminPass(), getPhoneNumber());
+        System.out.printf("%-20s%-20s%-20s\n", getAdminAcc(), getAdminPass(), getPhoneNumber());
     }
 
     @Override

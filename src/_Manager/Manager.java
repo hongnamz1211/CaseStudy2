@@ -1,11 +1,13 @@
-package _Computer;
+package _Manager;
 
+import _Computer.Computer;
 import _ReadWriteFile.IOFile;
-import _Service.Service;
+import _Computer.Service;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,28 +27,43 @@ public class Manager {
     private final File PATHNAME_OF_TURNOVER = new File("src/File/turnOver.csv");
     private final File PATHNAME_OF_TRADE = new File("src/File/trade.csv");
 
-    private final ArrayList<Service> services = ioFileService.readFileData(PATHNAME_OF_SERVICE);
+    private ArrayList<Service> services;
+
+    public Manager() {
+        if (PATHNAME_OF_SERVICE.length() == 0) {
+            this.services = new ArrayList<>();
+        } else {
+            this.services = ioFileService.readFileData(PATHNAME_OF_SERVICE);
+        }
+    }
 
     public void createComputer() {
-        boolean checkComputer = false;
-        System.out.println("Nhập số máy thêm");
-        int computerName = scanner.nextInt();
-        scanner.nextLine();
-        for (Computer c :
-                computers) {
-            if (c.getComputerName() == computerName) {
-                System.out.println("Đã có số máy này. Nhập lại");
-                checkComputer = true;
-                break;
+        try {
+            boolean checkComputer = false;
+            System.out.println("Nhập số máy thêm");
+            int computerName = scanner.nextInt();
+            scanner.nextLine();
+            for (Computer c :
+                    computers) {
+                if (c.getComputerName() == computerName) {
+                    System.out.println("Đã có số máy này. Nhập lại");
+                    checkComputer = true;
+                    break;
+                }
             }
+            if (!checkComputer) {
+                computers.add(new Computer(computerName));
+                ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+                System.out.println("-----");
+                System.out.println("Thêm máy số '" + computerName + "' thành công");
+                displayComputer();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
+            System.out.println();
         }
-        if (!checkComputer) {
-            computers.add(new Computer(computerName));
-            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-            System.out.println("-----");
-            System.out.println("Thêm máy số '" + computerName + "' thành công");
-            displayComputer();
-        }
+
     }
 
     public void displayComputer() {
@@ -55,12 +72,13 @@ public class Manager {
         } else {
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
             System.out.println("-----");
-            System.out.println("Danh sách máy");
+            System.out.println("DANH SÁCH MÁY");
             computer.displayBored();
             for (Computer c :
                     computers) {
                 c.display();
             }
+            computer.displayBoredBot();
             System.out.println("-----");
         }
 
@@ -127,13 +145,12 @@ public class Manager {
     public void computerAvailable(int computers) {
         int choice;
         do {
-            System.out.println("-----");
-            System.out.println("Thao tác");
-            System.out.println("1. Thêm dịch vụ");
-            System.out.println("2. Thanh toán");
-            System.out.println("0. Quay lại");
-            System.out.println("-----");
-            System.out.println("Nhập lựa chọn");
+            System.out.println("┎─────[QUẢN LÝ MÁY SỐ " + computer.getComputerName() + "]──────────────┒");
+            System.out.println("┠     1. Thêm dịch vụ                 ┨");
+            System.out.println("┠     2. Thanh toán                   ┨");
+            System.out.println("┠     0. Quay lại                     ┨");
+            System.out.println("┖─────────────────────────────────────┚");
+            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -156,7 +173,7 @@ public class Manager {
             if (c.getComputerName() == computerName) {
                 System.out.println("-----");
                 displayService();
-                System.out.println("Nhập tên dịch vụ muốn thêm");
+                System.out.print("Nhập tên dịch vụ muốn thêm: ");
                 String name = scanner.nextLine();
                 for (Service s :
                         services) {
@@ -181,16 +198,15 @@ public class Manager {
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
-                System.out.println("-----");
-                System.out.println("Xác nhận thanh toán máy số '" + c.getComputerName() + "'");
-                System.out.println("1. Thanh toán");
-                System.out.println("0. Quay lại");
-                System.out.println("-----");
-                System.out.println("Nhập lựa chọn");
+                System.out.println("┎─────[THANH TOÁN MÁY SỐ " + computer.getComputerName() + "]───────────┒");
+                System.out.println("┠     1. Xác nhận                     ┨");
+                System.out.println("┠     0. Quay lại                     ┨");
+                System.out.println("┖─────────────────────────────────────┚");
+                System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
                 if (choice == 1) {
-                    System.out.println("Số tiền phải thanh toán '" + c.payment() + "' VNĐ");
+                    System.out.println("Thanh toán thành công '" + c.payment() + "' VNĐ");
                     turnOver += c.payment();
                     c.stopTime();
                     c.setMinute(0);
@@ -218,11 +234,11 @@ public class Manager {
             if (c.getComputerName() == computerName) {
                 int choice;
                 do {
-                    System.out.println("-----");
-                    System.out.println("Máy đang offline. Bạn có xác nhận bật máy không?");
-                    System.out.println("1. Bật máy");
-                    System.out.println("0. Quay lại");
-                    System.out.println("-----");
+                    System.out.println("┎─────[BẬT MÁY SỐ " + c.getComputerName() + "]──────────────────┒");
+                    System.out.println("┠     1. Xác nhận                     ┨");
+                    System.out.println("┠     0. Quay lại                     ┨");
+                    System.out.println("┖─────────────────────────────────────┚");
+                    System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
                     choice = scanner.nextInt();
                     scanner.nextLine();
                     if (choice == 1) {
@@ -246,10 +262,11 @@ public class Manager {
         System.out.println(computer.getPriceOfTime());
         System.out.println("Nhập giá muốn thay đổi");
         int priceOfTime = scanner.nextInt();
-        System.out.println("Xác nhận thay đổi");
-        System.out.println("1. Xác nhận");
-        System.out.println("0. Quay lại");
-        System.out.println("Nhập lựa chọn");
+        System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
+        System.out.println("┠     1. Xác nhận                     ┨");
+        System.out.println("┠     0. Quay lại                     ┨");
+        System.out.println("┖─────────────────────────────────────┚");
+        System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
         choice = scanner.nextInt();
         scanner.nextLine();
         if (choice == 1) {
@@ -294,7 +311,7 @@ public class Manager {
             System.out.println("Chưa có dịch vụ nào! Vui lòng thêm dịch vụ!");
         } else {
             System.out.println("-----");
-            System.out.println("Bảng dịch vụ");
+            System.out.println("BẢNG DỊCH VỤ");
             ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
             ArrayList<Service> services = ioFileService.readFileData(PATHNAME_OF_SERVICE);
             service.displayBored();
@@ -302,6 +319,7 @@ public class Manager {
                     services) {
                 s.display();
             }
+            service.displayBoredBot();
             System.out.println("-----");
             ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
         }
@@ -324,6 +342,7 @@ public class Manager {
     }
 
     public void editService(String name) {
+        boolean checkService = false;
         Service service = null;
         for (Service s :
                 services) {
@@ -338,19 +357,22 @@ public class Manager {
             for (Service s :
                     services) {
                 if (s.getServiceName().equals(serviceName)) {
-                    System.out.println("Đã có dịch vụ này");
+                    System.out.println("Đã có dịch vụ này! Vui lòng nhập lại");
+                    checkService = true;
                     break;
                 }
             }
-            service.setServiceName(serviceName);
-            System.out.println("Nhập giá dịch vụ mới");
-            int priceOfService = scanner.nextInt();
-            service.setPriceOfService(priceOfService);
-            scanner.nextLine();
-            services.set(index, service);
-            ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-            System.out.println("Cập nhật '" + serviceName + "' thành công");
-            displayService();
+            if (!checkService) {
+                service.setServiceName(serviceName);
+                System.out.println("Nhập giá dịch vụ mới");
+                int priceOfService = scanner.nextInt();
+                service.setPriceOfService(priceOfService);
+                scanner.nextLine();
+                services.set(index, service);
+                ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
+                System.out.println("Cập nhật '" + serviceName + "' thành công");
+                displayService();
+            }
         }
     }
 
@@ -374,15 +396,17 @@ public class Manager {
     }
 
     public void turnOverByDay() {
-        System.out.println("Doanh thu theo ngày");
-        System.out.println("Nhập tháng");
-        String month = scanner.nextLine();
-        System.out.println("Nhập ngày bắt đầu");
+        System.out.println("┎─────[DOANH THU THEO NGÀY]──────────┒");
+          System.out.print("┠ ▹ Nhập ngày bắt đầu: ");
         String startDay = scanner.nextLine();
-        System.out.println("Nhập ngày kết thúc");
+          System.out.print("┠ ▹ Nhập tháng: ");
+        String startmonth = scanner.nextLine();
+          System.out.print("┠ ▹ Nhập ngày kết thúc: ");
         String endDay = scanner.nextLine();
-        System.out.println("-----");
-        Pattern pattern = Pattern.compile("^Ngày [" + startDay + "-" + endDay + "]+/[" + month + "]+:(.*?)VNĐ$");
+          System.out.print("┠ ▹ Nhập tháng: ");
+          String endMonth = scanner.nextLine();
+        System.out.println("┖─────────────────────────────────────┚");
+        Pattern pattern = Pattern.compile("^Ngày [" + startDay + "-" + endDay + "]+/[" + startmonth + "-" + endMonth + "]+:(.*?)VNĐ$");
         String line = "";
         Matcher matcher;
         int turnOverByDay = 0;
