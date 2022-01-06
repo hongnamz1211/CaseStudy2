@@ -29,20 +29,18 @@ public class Login {
     }
 
     public void menuLogin() {
-        System.out.println();
-        System.out.println("┎─────[HỆ THỐNG QUẢN LÝ QUÁN NET]─────┒");
-        System.out.println("┠     1. Đăng nhập                    ┨");
-        System.out.println("┠     2. Đăng ký                      ┨");
-        System.out.println("┠     0. Thoát chương trình           ┨");
-        System.out.println("┖─────────────────────────────────────┚");
-        System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
         do {
-            if (choice < 0 || choice > 2) {
-                System.out.println("[\uD83D\uDD14] Lựa chọn không tồn tại! Vui lòng nhập lại");
-                break;
-            }
+            System.out.println();
+            System.out.println("┎─────[HỆ THỐNG QUẢN LÝ QUÁN NET]─────┒");
+            System.out.println("┠     1. Đăng nhập                    ┨");
+            System.out.println("┠     2. Đăng ký                      ┨");
+            System.out.println("┠     0. Thoát chương trình           ┨");
+            System.out.println("┖─────────────────────────────────────┚");
+            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+
             switch (choice) {
                 case 1:
                     signInManager();
@@ -58,7 +56,7 @@ public class Login {
                     System.exit(0);
                     break;
             }
-        }  while (true) ;
+        } while (true);
     }
 
     private void addAccount() {
@@ -72,7 +70,6 @@ public class Login {
         System.out.print("┠ ▹ Nhập mật khẩu: ");
         String adminPass = scanner.nextLine();
         System.out.println("┖─────────────────────────────────────┚");
-
         checkAcc(adminAcc, adminPass);
     }
 
@@ -91,7 +88,7 @@ public class Login {
         try {
             if (checkAccAdminInLogin(adminAcc, adminPass)) {
                 System.out.println();
-                System.out.println("Đăng nhập thành công");
+                System.out.println("[\uD83D\uDD14] Đăng nhập thành công");
                 System.out.println();
                 menuManager.menuManager();
             } else {

@@ -25,17 +25,13 @@ public class Manager {
     private final File PATHNAME_OF_COMPUTER = new File("src/File/computer");
     private final File PATHNAME_OF_SERVICE = new File("src/File/service");
     private final File PATHNAME_OF_TURNOVER = new File("src/File/turnOver.csv");
-    private final File PATHNAME_OF_TRADE = new File("src/File/trade.csv");
 
     private ArrayList<Service> services;
-    private static Pattern patternString;
     private static Pattern patternNumber;
     private static final String REGEX_NUMBER = "^(\\d+)$";
-    private static final String REGEX_STRING = "^([a-zA-Z]{1})(.*\\w+)$";
 
     public Manager() {
         patternNumber = Pattern.compile(REGEX_NUMBER);
-        patternString = Pattern.compile(REGEX_STRING);
         if (PATHNAME_OF_SERVICE.length() == 0) {
             this.services = new ArrayList<>();
         } else {
@@ -48,40 +44,29 @@ public class Manager {
         return matcher.matches();
     }
 
-    private boolean validateString(String regex) {
-        Matcher matcher = patternString.matcher(regex);
-        return matcher.matches();
-    }
 
-    public void createComputer() {
+    public void createComputer() throws NumberFormatException {
         int computerName;
-        try {
-            boolean checkComputer = false;
-            do {
-                System.out.println("Nhập số máy thêm");
-                computerName = Integer.parseInt(scanner.nextLine());
-            } while (!validateNumber(String.valueOf(computerName)));
-            for (Computer c :
-                    computers) {
-                if (c.getComputerName() == computerName) {
-                    System.out.println("[\uD83D\uDD14] Đã có số máy này! Vui lòng nhập lại");
-                    checkComputer = true;
-                    break;
-                }
+        boolean checkComputer = false;
+        do {
+            System.out.print("[\uD83D\uDEAC] Nhập số máy thêm: ");
+            computerName = Integer.parseInt(scanner.nextLine());
+        } while (!validateNumber(String.valueOf(computerName)));
+        for (Computer c :
+                computers) {
+            if (c.getComputerName() == computerName) {
+                System.out.println("[\uD83D\uDD14] Đã có số máy này! Vui lòng nhập lại");
+                checkComputer = true;
+                break;
             }
-            if (!checkComputer) {
-                computers.add(new Computer(computerName));
-                ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-                System.out.println("-----");
-                System.out.println("[\uD83D\uDD14] Thêm máy số '" + computerName + "' thành công");
-                displayComputer();
-            }
-        } catch (Exception e) {
-            System.out.println();
-            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
-            System.out.println();
         }
-
+        if (!checkComputer) {
+            computers.add(new Computer(computerName));
+            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+            System.out.println("-----");
+            System.out.println("[\uD83D\uDD14] Thêm máy số '" + computerName + "' thành công");
+            displayComputer();
+        }
     }
 
     public void displayComputer() {
@@ -118,7 +103,7 @@ public class Manager {
         }
     }
 
-    public void editComputer(int editComputer) {
+    public void editComputer(int editComputer) throws NumberFormatException {
         Computer computer = null;
         for (Computer c :
                 computers) {
@@ -128,7 +113,7 @@ public class Manager {
         }
         if (computer != null) {
             int index = computers.indexOf(computer);
-            System.out.println("Nhập số máy mới");
+            System.out.print("[\uD83D\uDEAC] Nhập số máy mới: ");
             int computerName = scanner.nextInt();
             for (Computer c :
                     computers) {
@@ -146,8 +131,8 @@ public class Manager {
         }
     }
 
-    public void statusComputer() {
-        System.out.println("Nhập tên máy muốn thao tác");
+    public void statusComputer() throws NumberFormatException {
+        System.out.print("[\uD83D\uDEAC] Nhập tên máy muốn thao tác: ");
         int computerName = scanner.nextInt();
         for (Computer c : computers) {
             if (c.getComputerName() == computerName) {
@@ -160,40 +145,33 @@ public class Manager {
         }
     }
 
-    public void computerAvailable(int computers) {
-        try {
-            int choice;
-            do {
-                System.out.println("┎─────[QUẢN LÝ MÁY SỐ " + computers + "]──────────────┒");
-                System.out.println("┠     1. Thêm dịch vụ                 ┨");
-                System.out.println("┠     2. Thanh toán                   ┨");
-                System.out.println("┠     0. Quay lại                     ┨");
-                System.out.println("┖─────────────────────────────────────┚");
-                System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
-                choice = scanner.nextInt();
-                scanner.nextLine();
-                switch (choice) {
-                    case 1:
-                        addService(computers);
-                        choice = 0;
-                        break;
-                    case 2:
-                        payment(computers);
-                        choice = 0;
-                        break;
-                    case 0:
-                        choice = 0;
-                        break;
-                    default:
-                        System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại!");
-                }
-            } while (choice != 0);
-        } catch (InputMismatchException e) {
-            System.out.println();
-            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại!");
-            System.out.println();
+    public void computerAvailable(int computers) throws InputMismatchException, NumberFormatException {
+        int choice;
+        do {
+            System.out.println("┎─────[QUẢN LÝ MÁY SỐ " + computers + "]──────────────┒");
+            System.out.println("┠     1. Thêm dịch vụ                 ┨");
+            System.out.println("┠     2. Thanh toán                   ┨");
+            System.out.println("┠     0. Quay lại                     ┨");
+            System.out.println("┖─────────────────────────────────────┚");
+            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+            choice = scanner.nextInt();
             scanner.nextLine();
-        }
+            switch (choice) {
+                case 1:
+                    addService(computers);
+                    choice = 0;
+                    break;
+                case 2:
+                    payment(computers);
+                    choice = 0;
+                    break;
+                case 0:
+                    choice = 0;
+                    break;
+                default:
+                    System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại!");
+            }
+        } while (choice != 0);
     }
 
     public void addService(int computerName) {
@@ -204,7 +182,7 @@ public class Manager {
             if (c.getComputerName() == computerName) {
                 System.out.println("-----");
                 displayService();
-                System.out.print("Nhập tên dịch vụ muốn thêm: ");
+                System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ muốn thêm: ");
                 String name = scanner.nextLine();
                 for (Service s :
                         services) {
@@ -215,7 +193,7 @@ public class Manager {
                     }
                 }
                 if (!checkServiceName) {
-                    System.out.println("Không tìm thấy dịch vụ! Vui lòng nhập lại!");
+                    System.out.println("[\uD83D\uDD14] Không tìm thấy dịch vụ! Vui lòng nhập lại!");
                 }
             }
         }
@@ -229,7 +207,7 @@ public class Manager {
         displayComputer();
     }
 
-    public void payment(int computerName) {
+    public void payment(int computerName) throws InputMismatchException, NumberFormatException {
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
@@ -247,7 +225,11 @@ public class Manager {
                             System.out.println("[\uD83D\uDD14] Thanh toán thành công '" + c.payment() + "' VNĐ");
                             turnOver += c.payment();
                             c.stopTime();
-                            setPropertyComputer(computerName);
+                            c.setMinute(0);
+                            c.setStatus("disable");
+                            c.setPriceOfService(0);
+                            c.setPriceOfTime(0);
+                            c.setEndUsed(new Date());
                             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
                             displayComputer();
                             choice = 0;
@@ -258,18 +240,7 @@ public class Manager {
         }
     }
 
-    public void setPropertyComputer(int computerName) {
-        for (Computer c:
-             computers) {
-            c.setMinute(0);
-            c.setStatus("disable");
-            c.setPriceOfService(0);
-            c.setPriceOfTime(0);
-            c.setEndUsed(new Date());
-        }
-    }
-
-    public void computerDisable(int computerName) {
+    public void computerDisable(int computerName) throws InputMismatchException, NumberFormatException {
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
@@ -299,13 +270,13 @@ public class Manager {
         }
     }
 
-    public void setupPriceOfTime() {
+    public void setupPriceOfTime() throws InputMismatchException, NumberFormatException {
         if (checkComputerDisable()) {
             int choice;
             do {
-                System.out.println("Giá tiền 1h hiện tại");
+                System.out.print("Giá tiền 1h hiện tại: ");
                 System.out.println(computer.getPriceOfTime());
-                System.out.println("Nhập giá muốn thay đổi");
+                System.out.print("[\uD83D\uDEAC] Nhập giá muốn thay đổi: ");
                 int priceOfTime = scanner.nextInt();
                 System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
                 System.out.println("┠     1. Xác nhận                     ┨");
@@ -343,10 +314,10 @@ public class Manager {
     }
 
 
-    public void createService() {
+    public void createService() throws NumberFormatException {
         try {
             boolean checkService = false;
-            System.out.println("Nhập tên dịch vụ");
+            System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ: ");
             String serviceName = scanner.nextLine();
             for (Service s :
                     services) {
@@ -359,7 +330,7 @@ public class Manager {
             int priceOfService;
             if (!checkService) {
                 do {
-                    System.out.println("Nhập giá dịch vụ");
+                    System.out.print("[\uD83D\uDEAC] Nhập giá dịch vụ: ");
                     priceOfService = Integer.parseInt(scanner.nextLine());
                 } while (!validateNumber(String.valueOf(priceOfService)));
                 services.add(new Service(serviceName, priceOfService));
@@ -368,7 +339,7 @@ public class Manager {
                 displayService();
             }
         } catch (Exception e) {
-            System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại");
+            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
         }
     }
 
@@ -409,7 +380,7 @@ public class Manager {
             displayService();
         }
         if (!checkServiceName) {
-            System.out.println("Không tìm thấy dịch vụ! Vui lòng nhập lại!");
+            System.out.println("[\uD83D\uDD14] Không tìm thấy dịch vụ! Vui lòng nhập lại!");
         }
     }
 
@@ -424,7 +395,7 @@ public class Manager {
         }
         if (service != null) {
             int index = services.indexOf(service);
-            System.out.println("Nhập tên dịch vụ mới");
+            System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ mới: ");
             String serviceName = scanner.nextLine();
             for (Service s :
                     services) {
@@ -436,7 +407,7 @@ public class Manager {
             }
             if (!checkService) {
                 service.setServiceName(serviceName);
-                System.out.println("Nhập giá dịch vụ mới");
+                System.out.print("[\uD83D\uDEAC] Nhập giá dịch vụ mới: ");
                 int priceOfService = scanner.nextInt();
                 service.setPriceOfService(priceOfService);
                 scanner.nextLine();
@@ -469,16 +440,16 @@ public class Manager {
         }
     }
 
-    public void turnOverByDay() {
+    public void turnOverByDay() throws InputMismatchException, NumberFormatException {
         System.out.println("┎─────[DOANH THU THEO NGÀY]──────────┒");
         System.out.print("┠ ▹ Nhập ngày bắt đầu: ");
-        String startDay = scanner.nextLine();
+        int startDay = Integer.parseInt(scanner.nextLine());
         System.out.print("┠ ▹ Nhập tháng: ");
-        String startmonth = scanner.nextLine();
+        int startmonth = Integer.parseInt(scanner.nextLine());
         System.out.print("┠ ▹ Nhập ngày kết thúc: ");
-        String endDay = scanner.nextLine();
+        int endDay = Integer.parseInt(scanner.nextLine());
         System.out.print("┠ ▹ Nhập tháng: ");
-        String endMonth = scanner.nextLine();
+        int endMonth = Integer.parseInt(scanner.nextLine());
         System.out.println("┖─────────────────────────────────────┚");
         Pattern pattern = Pattern.compile("^Ngày [" + startDay + "-" + endDay + "]+/[" + startmonth + "-" + endMonth + "]+:(.*?)VNĐ$");
         String line = "";
@@ -493,7 +464,7 @@ public class Manager {
                 }
             }
             System.out.println("┎─────[DOANH THU THEO NGÀY]───────────────────────┒");
-            System.out.println("┠ ▹ Thời gian: " + startDay + "/" + startmonth + "-" + endDay + "/" + endMonth);
+            System.out.println("┠ ▹ Thời gian: " + startDay + "/" + startmonth + " - " + endDay + "/" + endMonth);
             System.out.println("┠ ▹ Doanh thu: " + turnOverByDay + "VNĐ");
             System.out.println("┖─────────────────────────────────────────────────┚");
         } catch (IOException e) {

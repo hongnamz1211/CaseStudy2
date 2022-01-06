@@ -57,12 +57,12 @@ public class AccUserManager {
                         createAccUser();
                         break;
                     case 3:
-                        System.out.println("Nhập tên tài khoản muốn sửa");
+                        System.out.print("[\uD83D\uDEAC] Nhập tên tài khoản muốn sửa: ");
                         String accEdit = scanner.nextLine();
                         editAccUser(accEdit);
                         break;
                     case 4:
-                        System.out.println("Nhập tên tài khoản muốn xóa");
+                        System.out.print("[\uD83D\uDEAC] Nhập tên tài khoản muốn xóa: ");
                         String accDel = scanner.nextLine();
                         deleteAccUser(accDel);
                         break;
@@ -82,7 +82,7 @@ public class AccUserManager {
 
     public void createAccUser() {
         boolean checkAccUser = false;
-        System.out.println("Nhập tài khoản");
+        System.out.print("[\uD83D\uDEAC] Nhập tài khoản: ");
         String userAcc = scanner.nextLine();
         for (AccountUser a :
                 accountUsers) {
@@ -93,7 +93,7 @@ public class AccUserManager {
             }
         }
         if (!checkAccUser) {
-            System.out.println("Nhập mật khẩu");
+            System.out.print("[\uD83D\uDEAC] Nhập mật khẩu: ");
             String userPass = scanner.nextLine();
             AccountUser accountUser = new AccountUser(userAcc, userPass);
             accountUsers.add(accountUser);
@@ -147,7 +147,7 @@ public class AccUserManager {
         }
         if (accountUser != null) {
             int index = accountUsers.indexOf(accountUser);
-            System.out.println("Nhập tài khoản");
+            System.out.print("[\uD83D\uDEAC] Nhập tài khoản: ");
             String userAcc = scanner.nextLine();
             for (AccountUser a :
                     accountUsers) {
@@ -159,7 +159,7 @@ public class AccUserManager {
             }
             if (!checkAccUser) {
                 accountUser.setUserAcc(userAcc);
-                System.out.println("Nhập mật khẩu");
+                System.out.print("[\uD83D\uDEAC] Nhập mật khẩu: ");
                 String userPass = scanner.nextLine();
                 accountUser.setUserPass(userPass);
                 accountUsers.set(index, accountUser);

@@ -173,7 +173,6 @@ public class Computer implements Runnable, Serializable {
     }
 
 
-
 //    public String writeUser() {
 //        return getComputerName() + ", " + getUsedTime() + ", " + payment() + ", " + getStartTime() + ", " + getEndTime();
 //    }
