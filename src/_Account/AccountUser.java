@@ -39,6 +39,6 @@ public class AccountUser implements Serializable {
     }
 
     public void displayBoredBot() {
-        System.out.println("┖────────────────────────┴─────────────────────┚");
+        System.out.println("┖───────────────────────┴──────────────────────┚");
     }
 }

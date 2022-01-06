@@ -19,7 +19,7 @@ public class Login {
         try {
             addAccount();
             menuLogin();
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NullPointerException e) {
             System.out.println();
             System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
             System.out.println();
@@ -33,22 +33,32 @@ public class Login {
         System.out.println("┎─────[HỆ THỐNG QUẢN LÝ QUÁN NET]─────┒");
         System.out.println("┠     1. Đăng nhập                    ┨");
         System.out.println("┠     2. Đăng ký                      ┨");
+        System.out.println("┠     0. Thoát chương trình           ┨");
         System.out.println("┖─────────────────────────────────────┚");
         System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
         int choice = scanner.nextInt();
         scanner.nextLine();
-        switch (choice) {
-            case 1:
-                signInManager();
+        do {
+            if (choice < 0 || choice > 2) {
+                System.out.println("[\uD83D\uDD14] Lựa chọn không tồn tại! Vui lòng nhập lại");
                 break;
-            case 2:
-                System.out.println("┎─────[XÁC NHẬN ĐIỆN THOẠI]───────────┒");
-                System.out.println("┠ ▹ Nhập số điện thoại: ");
-                String phoneNumber = scanner.nextLine();
-                System.out.println("┖─────────────────────────────────────┚");
-                signUpManager(phoneNumber);
-                break;
-        }
+            }
+            switch (choice) {
+                case 1:
+                    signInManager();
+                    break;
+                case 2:
+                    System.out.println("┎─────[XÁC NHẬN ĐIỆN THOẠI]───────────┒");
+                    System.out.println("┠ ▹ Nhập số điện thoại: ");
+                    String phoneNumber = scanner.nextLine();
+                    System.out.println("┖─────────────────────────────────────┚");
+                    signUpManager(phoneNumber);
+                    break;
+                case 0:
+                    System.exit(0);
+                    break;
+            }
+        }  while (true) ;
     }
 
     private void addAccount() {

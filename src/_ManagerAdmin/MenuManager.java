@@ -1,6 +1,7 @@
 package _ManagerAdmin;
 
 import _Account.AccUserManager;
+import _Login.Login;
 import _Manager.Manager;
 
 import java.util.InputMismatchException;
@@ -33,8 +34,9 @@ public class MenuManager {
 
     public void menuManager() {
         try {
+            int choice;
             do {
-                int choice = choiceOfAdmin();
+                choice = choiceOfAdmin();
                 switch (choice) {
                     case 1:
                         manager.displayComputer();
@@ -89,14 +91,11 @@ public class MenuManager {
                     case 15:
                         manager.turnOverAll();
                         break;
-//                    case 0:
-//                        login.menuLogin();
-//                        break;
-                    default:
-                        System.out.println("Lựa chọn không đúng! Vui lòng nhập lại!");
+                    case 0:
+                        (new Login()).loginSystems();
                         break;
                 }
-            } while (true);
+            } while (choice != 0);
         } catch (InputMismatchException e) {
             System.out.println();
             System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại");

@@ -28,8 +28,14 @@ public class Manager {
     private final File PATHNAME_OF_TRADE = new File("src/File/trade.csv");
 
     private ArrayList<Service> services;
+    private static Pattern patternString;
+    private static Pattern patternNumber;
+    private static final String REGEX_NUMBER = "^(\\d+)$";
+    private static final String REGEX_STRING = "^([a-zA-Z]{1})(.*\\w+)$";
 
     public Manager() {
+        patternNumber = Pattern.compile(REGEX_NUMBER);
+        patternString = Pattern.compile(REGEX_STRING);
         if (PATHNAME_OF_SERVICE.length() == 0) {
             this.services = new ArrayList<>();
         } else {
@@ -37,16 +43,28 @@ public class Manager {
         }
     }
 
+    private boolean validateNumber(String regex) {
+        Matcher matcher = patternNumber.matcher(regex);
+        return matcher.matches();
+    }
+
+    private boolean validateString(String regex) {
+        Matcher matcher = patternString.matcher(regex);
+        return matcher.matches();
+    }
+
     public void createComputer() {
+        int computerName;
         try {
             boolean checkComputer = false;
-            System.out.println("Nhập số máy thêm");
-            int computerName = scanner.nextInt();
-            scanner.nextLine();
+            do {
+                System.out.println("Nhập số máy thêm");
+                computerName = Integer.parseInt(scanner.nextLine());
+            } while (!validateNumber(String.valueOf(computerName)));
             for (Computer c :
                     computers) {
                 if (c.getComputerName() == computerName) {
-                    System.out.println("Đã có số máy này. Nhập lại");
+                    System.out.println("[\uD83D\uDD14] Đã có số máy này! Vui lòng nhập lại");
                     checkComputer = true;
                     break;
                 }
@@ -55,10 +73,10 @@ public class Manager {
                 computers.add(new Computer(computerName));
                 ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
                 System.out.println("-----");
-                System.out.println("Thêm máy số '" + computerName + "' thành công");
+                System.out.println("[\uD83D\uDD14] Thêm máy số '" + computerName + "' thành công");
                 displayComputer();
             }
-        } catch (InputMismatchException e) {
+        } catch (Exception e) {
             System.out.println();
             System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
             System.out.println();
@@ -68,7 +86,7 @@ public class Manager {
 
     public void displayComputer() {
         if (PATHNAME_OF_COMPUTER.length() == 0) {
-            System.out.println("Chưa có máy nào! Vui lòng thêm máy!");
+            System.out.println("[\uD83D\uDD14] Chưa có máy nào! Vui lòng thêm máy!");
         } else {
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
             System.out.println("-----");
@@ -95,7 +113,7 @@ public class Manager {
         if (computer != null) {
             computers.remove(computer);
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-            System.out.println("Xóa máy số '" + computer.getComputerName() + "' thành công");
+            System.out.println("[\uD83D\uDD14] Xóa máy số '" + computer.getComputerName() + "' thành công");
             displayComputer();
         }
     }
@@ -115,7 +133,7 @@ public class Manager {
             for (Computer c :
                     computers) {
                 if (c.getComputerName() == computerName) {
-                    System.out.println("Đã có số máy này. Nhập lại");
+                    System.out.println("[\uD83D\uDD14] Đã có số máy này! Vui lòng nhập lại!");
                     break;
                 }
             }
@@ -123,7 +141,7 @@ public class Manager {
             scanner.nextLine();
             computers.set(index, computer);
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-            System.out.println("Cập nhật máy số '" + computer.getComputerName() + "' thành công");
+            System.out.println("[\uD83D\uDD14] Cập nhật máy số '" + computer.getComputerName() + "' thành công");
             displayComputer();
         }
     }
@@ -143,30 +161,43 @@ public class Manager {
     }
 
     public void computerAvailable(int computers) {
-        int choice;
-        do {
-            System.out.println("┎─────[QUẢN LÝ MÁY SỐ " + computer.getComputerName() + "]──────────────┒");
-            System.out.println("┠     1. Thêm dịch vụ                 ┨");
-            System.out.println("┠     2. Thanh toán                   ┨");
-            System.out.println("┠     0. Quay lại                     ┨");
-            System.out.println("┖─────────────────────────────────────┚");
-            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
-            choice = scanner.nextInt();
+        try {
+            int choice;
+            do {
+                System.out.println("┎─────[QUẢN LÝ MÁY SỐ " + computers + "]──────────────┒");
+                System.out.println("┠     1. Thêm dịch vụ                 ┨");
+                System.out.println("┠     2. Thanh toán                   ┨");
+                System.out.println("┠     0. Quay lại                     ┨");
+                System.out.println("┖─────────────────────────────────────┚");
+                System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        addService(computers);
+                        choice = 0;
+                        break;
+                    case 2:
+                        payment(computers);
+                        choice = 0;
+                        break;
+                    case 0:
+                        choice = 0;
+                        break;
+                    default:
+                        System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại!");
+                }
+            } while (choice != 0);
+        } catch (InputMismatchException e) {
+            System.out.println();
+            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại!");
+            System.out.println();
             scanner.nextLine();
-            switch (choice) {
-                case 1:
-                    addService(computers);
-                    choice = 0;
-                    break;
-                case 2:
-                    payment(computers);
-                    choice = 0;
-                    break;
-            }
-        } while (choice != 0);
+        }
     }
 
     public void addService(int computerName) {
+        boolean checkServiceName = false;
         int priceOfService = 0;
         for (Computer c :
                 computers) {
@@ -179,8 +210,12 @@ public class Manager {
                         services) {
                     if (s.getServiceName().equals(name)) {
                         priceOfService += s.getPriceOfService();
+                        checkServiceName = true;
                         System.out.println("Thêm '" + s.getServiceName() + "' vào máy số '" + c.getComputerName() + "' thành công");
                     }
+                }
+                if (!checkServiceName) {
+                    System.out.println("Không tìm thấy dịch vụ! Vui lòng nhập lại!");
                 }
             }
         }
@@ -198,37 +233,43 @@ public class Manager {
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
-                System.out.println("┎─────[THANH TOÁN MÁY SỐ " + computer.getComputerName() + "]───────────┒");
-                System.out.println("┠     1. Xác nhận                     ┨");
-                System.out.println("┠     0. Quay lại                     ┨");
-                System.out.println("┖─────────────────────────────────────┚");
-                System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
-                int choice = scanner.nextInt();
-                scanner.nextLine();
-                if (choice == 1) {
-                    System.out.println("Thanh toán thành công '" + c.payment() + "' VNĐ");
-                    turnOver += c.payment();
-                    c.stopTime();
-                    c.setMinute(0);
-//                    c.setUsedTime("0:00:00");
-                    c.setStatus("disable");
-                    c.setPriceOfService(0);
-                    c.setPriceOfTime(0);
-                    c.setEndUsed(new Date());
-                    writeTrade(c);
-                    ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-                    displayComputer();
-                    // thêm bill
-                } else if (choice == 0) {
-                    displayComputer();
-                }
+                int choice;
+                do {
+                    System.out.println("┎─────[THANH TOÁN MÁY SỐ " + c.getComputerName() + "]───────────┒");
+                    System.out.println("┠     1. Xác nhận                     ┨");
+                    System.out.println("┠     0. Quay lại                     ┨");
+                    System.out.println("┖─────────────────────────────────────┚");
+                    System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+                    choice = scanner.nextInt();
+                    scanner.nextLine();
+                    switch (choice) {
+                        case 1:
+                            System.out.println("[\uD83D\uDD14] Thanh toán thành công '" + c.payment() + "' VNĐ");
+                            turnOver += c.payment();
+                            c.stopTime();
+                            setPropertyComputer(computerName);
+                            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+                            displayComputer();
+                            choice = 0;
+                            break;
+                    }
+                } while (choice != 0);
             }
         }
     }
 
+    public void setPropertyComputer(int computerName) {
+        for (Computer c:
+             computers) {
+            c.setMinute(0);
+            c.setStatus("disable");
+            c.setPriceOfService(0);
+            c.setPriceOfTime(0);
+            c.setEndUsed(new Date());
+        }
+    }
 
     public void computerDisable(int computerName) {
-
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
@@ -241,15 +282,17 @@ public class Manager {
                     System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
                     choice = scanner.nextInt();
                     scanner.nextLine();
-                    if (choice == 1) {
-                        c.setStatus("available");
-                        c.setUsedTime("0:00:01");
-                        c.setStartUsed(new Date());
-                        c.startTime();
-                        ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-                        System.out.println("Bật máy số '" + c.getComputerName() + "' thành công");
-                        displayComputer();
-                        break;
+                    switch (choice) {
+                        case 1:
+                            c.setStatus("available");
+                            c.setUsedTime("0:00:01");
+                            c.setStartUsed(new Date());
+                            c.startTime();
+                            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+                            System.out.println("[\uD83D\uDD14] Bật máy số '" + c.getComputerName() + "' thành công");
+                            choice = 0;
+                            displayComputer();
+                            break;
                     }
                 } while (choice != 0);
             }
@@ -257,23 +300,42 @@ public class Manager {
     }
 
     public void setupPriceOfTime() {
-        int choice;
-        System.out.println("Giá tiền 1h hiện tại");
-        System.out.println(computer.getPriceOfTime());
-        System.out.println("Nhập giá muốn thay đổi");
-        int priceOfTime = scanner.nextInt();
-        System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
-        System.out.println("┠     1. Xác nhận                     ┨");
-        System.out.println("┠     0. Quay lại                     ┨");
-        System.out.println("┖─────────────────────────────────────┚");
-        System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
-        choice = scanner.nextInt();
-        scanner.nextLine();
-        if (choice == 1) {
-            computer.setPriceOfTime(priceOfTime);
-            System.out.println("Thay đổi giá thành '" + priceOfTime + "'/1h thành công");
+        if (checkComputerDisable()) {
+            int choice;
+            do {
+                System.out.println("Giá tiền 1h hiện tại");
+                System.out.println(computer.getPriceOfTime());
+                System.out.println("Nhập giá muốn thay đổi");
+                int priceOfTime = scanner.nextInt();
+                System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
+                System.out.println("┠     1. Xác nhận                     ┨");
+                System.out.println("┠     0. Quay lại                     ┨");
+                System.out.println("┖─────────────────────────────────────┚");
+                System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+                choice = scanner.nextInt();
+                scanner.nextLine();
+                switch (choice) {
+                    case 1:
+                        computer.setPriceOfTime(priceOfTime);
+                        System.out.println("[\uD83D\uDD14] Thay đổi giá thành '" + priceOfTime + "'/1h thành công");
+                        choice = 0;
+                        break;
+                }
+            } while (choice != 0);
+        } else {
+            System.out.println("[\uD83D\uDD14] Vui lòng tắt hết máy trước khi thay đổi");
         }
-        // yêu cầu tắt hết máy khi thay đổi giá.
+    }
+
+    public boolean checkComputerDisable() {
+        ArrayList<Computer> computers = ioFileComputer.readFileData(PATHNAME_OF_COMPUTER);
+        for (Computer c :
+                computers) {
+            if (c.getStatus().equals("available")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getTurnOver() {
@@ -282,33 +344,38 @@ public class Manager {
 
 
     public void createService() {
-        boolean checkService = false;
-        System.out.println("Nhập tên dịch vụ");
-        String serviceName = scanner.nextLine();
-        for (Service s :
-                services) {
-            if (s.getServiceName().equals(serviceName)) {
-                System.out.println("Đã có dịch vụ này");
-                checkService = true;
-                break;
+        try {
+            boolean checkService = false;
+            System.out.println("Nhập tên dịch vụ");
+            String serviceName = scanner.nextLine();
+            for (Service s :
+                    services) {
+                if (s.getServiceName().equals(serviceName)) {
+                    System.out.println("[\uD83D\uDD14] Đã có dịch vụ này! Vui lòng nhập lại");
+                    checkService = true;
+                    break;
+                }
             }
-        }
-        if (!checkService) {
-            System.out.println("Nhập giá dịch vụ");
-            int priceOfService = scanner.nextInt();
-            scanner.nextLine();
-            services.add(new Service(serviceName, priceOfService));
-            ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-            displayService();
-            System.out.println("-----");
-            System.out.println("Thêm '" + serviceName + "' thành công");
+            int priceOfService;
+            if (!checkService) {
+                do {
+                    System.out.println("Nhập giá dịch vụ");
+                    priceOfService = Integer.parseInt(scanner.nextLine());
+                } while (!validateNumber(String.valueOf(priceOfService)));
+                services.add(new Service(serviceName, priceOfService));
+                ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
+                System.out.println("[\uD83D\uDD14] Thêm '" + serviceName + "' thành công");
+                displayService();
+            }
+        } catch (Exception e) {
+            System.out.println("Nhập sai dữ liệu! Vui lòng nhập lại");
         }
     }
 
 
     public void displayService() {
         if (PATHNAME_OF_SERVICE.length() == 0) {
-            System.out.println("Chưa có dịch vụ nào! Vui lòng thêm dịch vụ!");
+            System.out.println("[\uD83D\uDD14] Chưa có dịch vụ nào! Vui lòng thêm dịch vụ!");
         } else {
             System.out.println("-----");
             System.out.println("BẢNG DỊCH VỤ");
@@ -326,18 +393,23 @@ public class Manager {
     }
 
     public void deleteService(String name) {
+        boolean checkServiceName = false;
         Service service = null;
         for (Service s :
                 services) {
             if (s.getServiceName().equals(name)) {
+                checkServiceName = true;
                 service = s;
             }
         }
         if (service != null) {
             services.remove(service);
             ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-            System.out.println("Xóa '" + service.getServiceName() + "' thành công");
+            System.out.println("[\uD83D\uDD14] Xóa '" + service.getServiceName() + "' thành công");
             displayService();
+        }
+        if (!checkServiceName) {
+            System.out.println("Không tìm thấy dịch vụ! Vui lòng nhập lại!");
         }
     }
 
@@ -357,7 +429,7 @@ public class Manager {
             for (Service s :
                     services) {
                 if (s.getServiceName().equals(serviceName)) {
-                    System.out.println("Đã có dịch vụ này! Vui lòng nhập lại");
+                    System.out.println("[\uD83D\uDD14] Đã có dịch vụ này! Vui lòng nhập lại!");
                     checkService = true;
                     break;
                 }
@@ -370,7 +442,7 @@ public class Manager {
                 scanner.nextLine();
                 services.set(index, service);
                 ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-                System.out.println("Cập nhật '" + serviceName + "' thành công");
+                System.out.println("[\uD83D\uDD14] Cập nhật '" + serviceName + "' thành công");
                 displayService();
             }
         }
@@ -389,7 +461,9 @@ public class Manager {
                     turnOver += Integer.parseInt(matcher.group(1).trim());
                 }
             }
-            System.out.println("Tổng doanh thu là: " + turnOver + "VNĐ");
+            System.out.println("┎─────[CHỐT DOANH TỔNG]───────────────────────────┒");
+            System.out.println("┠ ▹ Doanh thu: " + turnOver + "VNĐ");
+            System.out.println("┖─────────────────────────────────────────────────┚");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -397,14 +471,14 @@ public class Manager {
 
     public void turnOverByDay() {
         System.out.println("┎─────[DOANH THU THEO NGÀY]──────────┒");
-          System.out.print("┠ ▹ Nhập ngày bắt đầu: ");
+        System.out.print("┠ ▹ Nhập ngày bắt đầu: ");
         String startDay = scanner.nextLine();
-          System.out.print("┠ ▹ Nhập tháng: ");
+        System.out.print("┠ ▹ Nhập tháng: ");
         String startmonth = scanner.nextLine();
-          System.out.print("┠ ▹ Nhập ngày kết thúc: ");
+        System.out.print("┠ ▹ Nhập ngày kết thúc: ");
         String endDay = scanner.nextLine();
-          System.out.print("┠ ▹ Nhập tháng: ");
-          String endMonth = scanner.nextLine();
+        System.out.print("┠ ▹ Nhập tháng: ");
+        String endMonth = scanner.nextLine();
         System.out.println("┖─────────────────────────────────────┚");
         Pattern pattern = Pattern.compile("^Ngày [" + startDay + "-" + endDay + "]+/[" + startmonth + "-" + endMonth + "]+:(.*?)VNĐ$");
         String line = "";
@@ -418,26 +492,20 @@ public class Manager {
                     turnOverByDay += Integer.parseInt(matcher.group(1).trim());
                 }
             }
-            System.out.println("Doanh thu từ ngày " + startDay + " đến ngày " + endDay + " là: " + turnOverByDay + "VNĐ");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void writeTrade(Computer computer) {
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATHNAME_OF_TRADE, true));
-            bufferedWriter.write(computer.writerTrade());
-            bufferedWriter.newLine();
-            bufferedWriter.close();
+            System.out.println("┎─────[DOANH THU THEO NGÀY]───────────────────────┒");
+            System.out.println("┠ ▹ Thời gian: " + startDay + "/" + startmonth + "-" + endDay + "/" + endMonth);
+            System.out.println("┠ ▹ Doanh thu: " + turnOverByDay + "VNĐ");
+            System.out.println("┖─────────────────────────────────────────────────┚");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void writeTurnOver() {
-        System.out.println("Đã chốt doanh thu của phiên");
-        System.out.println("Thời gian: " + new Date() + " = " + getTurnOver() + "VNĐ");
+        System.out.println("┎─────[CHỐT DOANH THU CỦA PHIÊN]──────────────────┒");
+        System.out.println("┠ ▹ Thời gian: " + new Date());
+        System.out.println("┠ ▹ Doanh thu: " + getTurnOver() + "VNĐ");
+        System.out.println("┖─────────────────────────────────────────────────┚");
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATHNAME_OF_TURNOVER, true));
             bufferedWriter.write("Ngày " + new Date().getDate() + "/" + (new Date().getMonth() + 1) + ":" + getTurnOver() + "VNĐ");
@@ -447,6 +515,4 @@ public class Manager {
             e.printStackTrace();
         }
     }
-
-
 }

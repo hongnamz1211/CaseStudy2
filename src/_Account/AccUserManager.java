@@ -66,8 +66,8 @@ public class AccUserManager {
                         String accDel = scanner.nextLine();
                         deleteAccUser(accDel);
                         break;
-                    default:
-                        System.out.println("[\uD83D\uDD14] Lựa chọn không đúng! Vui lòng nhập lại!");
+                    case 0:
+                        choice = 0;
                         break;
                 }
             } while (choice != 0);
