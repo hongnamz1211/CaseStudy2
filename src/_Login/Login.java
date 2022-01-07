@@ -17,7 +17,6 @@ public class Login {
 
     public void loginSystems() {
         try {
-            addAccount();
             menuLogin();
         } catch (InputMismatchException | NullPointerException e) {
             System.out.println();
@@ -47,7 +46,7 @@ public class Login {
                     break;
                 case 2:
                     System.out.println("┎─────[XÁC NHẬN ĐIỆN THOẠI]───────────┒");
-                    System.out.println("┠ ▹ Nhập số điện thoại: ");
+                    System.out.print("┠ ▹ Nhập số điện thoại: ");
                     String phoneNumber = scanner.nextLine();
                     System.out.println("┖─────────────────────────────────────┚");
                     signUpManager(phoneNumber);
@@ -64,6 +63,7 @@ public class Login {
     }
 
     private void signInManager() {
+        addAccount();
         System.out.println("┎─────[ĐĂNG NHẬP]─────────────────────┒");
         System.out.print("┠ ▹ Nhập tài khoản: ");
         String adminAcc = scanner.nextLine();

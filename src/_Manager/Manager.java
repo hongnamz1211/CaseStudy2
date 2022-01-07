@@ -26,7 +26,8 @@ public class Manager {
     private final File PATHNAME_OF_SERVICE = new File("src/File/service");
     private final File PATHNAME_OF_TURNOVER = new File("src/File/turnOver.csv");
 
-    private ArrayList<Service> services;
+
+    private final ArrayList<Service> services;
     private static Pattern patternNumber;
     private static final String REGEX_NUMBER = "^(\\d+)$";
 
@@ -76,15 +77,14 @@ public class Manager {
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
             System.out.println("-----");
             System.out.println("DANH SÁCH MÁY");
-            computer.displayBored();
+            System.out.println("┎───[TÊN MÁY]────────┬───[TRẠNG THÁI]────────┬───[THỜI GIAN]────────┬───[GIÁ / GIỜ]────────┬───[DỊCH VỤ]────────┬───[TỔNG TIỀN]────────┒");
             for (Computer c :
                     computers) {
-                c.display();
+                System.out.printf("%1S%30S%22S%22S%22S%22s\n", "┠    " + c.getComputerName(), c.getStatus(), c.getUsedTime(), c.getPriceOfTime(), c.getPriceOfService(), payment(c.getComputerName()));
             }
-            computer.displayBoredBot();
+            System.out.println("┖────────────────────┴───────────────────────┴──────────────────────┴──────────────────────┴────────────────────┴──────────────────────┚");
             System.out.println("-----");
         }
-
     }
 
     public void deleteComputer(int computerName) {
@@ -145,6 +145,39 @@ public class Manager {
         }
     }
 
+    public void computerDisable(int computerName) throws InputMismatchException, NumberFormatException {
+        for (Computer c :
+                computers) {
+            if (c.getComputerName() == computerName) {
+                int choice;
+                do {
+                    System.out.println("┎─────[BẬT MÁY SỐ " + c.getComputerName() + "]──────────────────┒");
+                    System.out.println("┠     1. Xác nhận                     ┨");
+                    System.out.println("┠     0. Quay lại                     ┨");
+                    System.out.println("┖─────────────────────────────────────┚");
+                    System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+                    choice = scanner.nextInt();
+                    scanner.nextLine();
+                    switch (choice) {
+                        case 1:
+                            c.setStatus("available");
+                            c.setUsedTime("0:00:01");
+                            c.setStartUsed(new Date());
+                            c.startTime();
+                            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+                            System.out.println("[\uD83D\uDD14] Bật máy số '" + c.getComputerName() + "' thành công");
+                            choice = 0;
+                            displayComputer();
+                            break;
+                        case 0:
+                            choice = 0;
+                            break;
+                    }
+                } while (choice != 0);
+            }
+        }
+    }
+
     public void computerAvailable(int computers) throws InputMismatchException, NumberFormatException {
         int choice;
         do {
@@ -162,7 +195,7 @@ public class Manager {
                     choice = 0;
                     break;
                 case 2:
-                    payment(computers);
+                    paymentComputer(computers);
                     choice = 0;
                     break;
                 case 0:
@@ -207,7 +240,7 @@ public class Manager {
         displayComputer();
     }
 
-    public void payment(int computerName) throws InputMismatchException, NumberFormatException {
+    public void paymentComputer(int computerName) throws InputMismatchException, NumberFormatException {
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
@@ -222,13 +255,14 @@ public class Manager {
                     scanner.nextLine();
                     switch (choice) {
                         case 1:
-                            System.out.println("[\uD83D\uDD14] Thanh toán thành công '" + c.payment() + "' VNĐ");
-                            turnOver += c.payment();
+                            System.out.println("[\uD83D\uDD14] Thanh toán thành công '" + payment(c.getComputerName()) + "' VNĐ");
+                            turnOver += payment(c.getComputerName());
+//                            turnOver += c.payment();
                             c.stopTime();
                             c.setMinute(0);
                             c.setStatus("disable");
                             c.setPriceOfService(0);
-                            c.setPriceOfTime(0);
+//                            c.setPriceOfTime(0);
                             c.setEndUsed(new Date());
                             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
                             displayComputer();
@@ -240,46 +274,23 @@ public class Manager {
         }
     }
 
-    public void computerDisable(int computerName) throws InputMismatchException, NumberFormatException {
+    public int payment(int computerName) {
         for (Computer c :
                 computers) {
             if (c.getComputerName() == computerName) {
-                int choice;
-                do {
-                    System.out.println("┎─────[BẬT MÁY SỐ " + c.getComputerName() + "]──────────────────┒");
-                    System.out.println("┠     1. Xác nhận                     ┨");
-                    System.out.println("┠     0. Quay lại                     ┨");
-                    System.out.println("┖─────────────────────────────────────┚");
-                    System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
-                    choice = scanner.nextInt();
-                    scanner.nextLine();
-                    switch (choice) {
-                        case 1:
-                            c.setStatus("available");
-                            c.setUsedTime("0:00:01");
-                            c.setStartUsed(new Date());
-                            c.startTime();
-                            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
-                            System.out.println("[\uD83D\uDD14] Bật máy số '" + c.getComputerName() + "' thành công");
-                            choice = 0;
-                            displayComputer();
-                            break;
-                    }
-                } while (choice != 0);
+                return (c.getMinute() * (c.getPriceOfTime() / 60) + c.getPriceOfService());
             }
         }
+        return 0;
     }
 
-    public void setupPriceOfTime() throws InputMismatchException, NumberFormatException {
+    public void setupPriceOfTime2() {
         if (checkComputerDisable()) {
             int choice;
             do {
-                System.out.print("Giá tiền 1h hiện tại: ");
-                System.out.println(computer.getPriceOfTime());
-                System.out.print("[\uD83D\uDEAC] Nhập giá muốn thay đổi: ");
-                int priceOfTime = scanner.nextInt();
-                System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
-                System.out.println("┠     1. Xác nhận                     ┨");
+                System.out.println("┎─────[THAY ĐỔI GIÁ TIỀN]─────────────┒");
+                System.out.println("┠     1. Thay đổi một máy             ┨");
+                System.out.println("┠     2. Thay đổi tất cả máy          ┨");
                 System.out.println("┠     0. Quay lại                     ┨");
                 System.out.println("┖─────────────────────────────────────┚");
                 System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
@@ -287,8 +298,11 @@ public class Manager {
                 scanner.nextLine();
                 switch (choice) {
                     case 1:
-                        computer.setPriceOfTime(priceOfTime);
-                        System.out.println("[\uD83D\uDD14] Thay đổi giá thành '" + priceOfTime + "'/1h thành công");
+                        setPriceOfTimeOneComputer();
+                        choice = 0;
+                        break;
+                    case 2:
+                        setupPriceOfTimeAllComputer();
                         choice = 0;
                         break;
                 }
@@ -297,6 +311,74 @@ public class Manager {
             System.out.println("[\uD83D\uDD14] Vui lòng tắt hết máy trước khi thay đổi");
         }
     }
+
+    public void setPriceOfTimeOneComputer() {
+        int choice;
+        boolean checkComputerName = false;
+        do {
+            System.out.println("-----");
+            System.out.println("THAY ĐỔI GIÁ 1 MÁY");
+            System.out.print("[\uD83D\uDEAC] Nhập số máy: ");
+            int computerNumber = scanner.nextInt();
+            System.out.print("[\uD83D\uDEAC] Nhập giá mới: ");
+            int priceOfTime = scanner.nextInt();
+            System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
+            System.out.println("┠     1. Xác nhận                     ┨");
+            System.out.println("┠     0. Quay lại                     ┨");
+            System.out.println("┖─────────────────────────────────────┚");
+            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    for (Computer c :
+                            computers) {
+                        if (c.getComputerName() == computerNumber) {
+                            c.setPriceOfTime(priceOfTime);
+                            System.out.println("[\uD83D\uDD14] Thay đổi giá máy số '" + c.getComputerName() + "' thành '" + c.getPriceOfTime() + "'/1h thành công");
+                            ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+                            checkComputerName = true;
+                            choice = 0;
+                            break;
+                        }
+                    }
+                    if (!checkComputerName) {
+                        System.out.println("[\uD83D\uDD14] Không tìm thấy số máy! Vui lòng nhập lại");
+                    }
+            }
+        } while (choice != 0);
+    }
+
+
+    public void setupPriceOfTimeAllComputer() throws InputMismatchException, NumberFormatException {
+        int choice;
+        do {
+            System.out.println("-----");
+            System.out.println("THAY ĐỔI GIÁ TẤT CẢ MÁY");
+            System.out.print("[\uD83D\uDEAC] Nhập giá mới: ");
+            int priceOfTime = scanner.nextInt();
+            System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
+            System.out.println("┠     1. Xác nhận                     ┨");
+            System.out.println("┠     0. Quay lại                     ┨");
+            System.out.println("┖─────────────────────────────────────┚");
+            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    for (Computer c :
+                            computers) {
+                        c.setPriceOfTime(priceOfTime);
+                    }
+                    computer.setPriceOfTime(priceOfTime);
+                    System.out.println("[\uD83D\uDD14] Thay đổi giá tất cả máy thành '" + computer.getPriceOfTime() + "'/1h thành công");
+                    ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
+                    choice = 0;
+                    break;
+            }
+        } while (choice != 0);
+    }
+
 
     public boolean checkComputerDisable() {
         ArrayList<Computer> computers = ioFileComputer.readFileData(PATHNAME_OF_COMPUTER);
@@ -308,6 +390,7 @@ public class Manager {
         }
         return true;
     }
+
 
     public int getTurnOver() {
         return turnOver;

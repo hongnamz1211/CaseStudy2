@@ -15,12 +15,6 @@ public class Service implements Serializable {
         this.priceOfService = priceOfService;
     }
 
-    public Service(String serviceName, int priceOfService, int quantityOfService) {
-        this.serviceName = serviceName;
-        this.priceOfService = priceOfService;
-        this.quantityOfService = quantityOfService;
-    }
-
     public String getServiceName() {
         return serviceName;
     }
@@ -50,8 +44,7 @@ public class Service implements Serializable {
     }
 
     public void display() {
-        System.out.printf("%4s", "┠    " + getServiceName());
-        System.out.printf("%25s\n", getPriceOfService());
+        System.out.printf("%4s%26s\n", "┠    " + getServiceName(), getPriceOfService());
     }
 
     public void displayBoredBot() {

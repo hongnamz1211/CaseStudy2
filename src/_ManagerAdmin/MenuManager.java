@@ -48,7 +48,7 @@ public class MenuManager {
                         accUserManager.accUserManager();
                         break;
                     case 5:
-                        manager.setupPriceOfTime();
+                        manager.setupPriceOfTime2();
                         break;
                     case 6:
                         manager.createComputer();

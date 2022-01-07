@@ -16,28 +16,11 @@ public class Computer implements Runnable, Serializable {
     private Date startUsed;
     private Date endUsed;
 
-    public Computer(int computerName, String status, String usedTime) {
-        this.computerName = computerName;
-        this.status = status;
-        this.usedTime = usedTime;
-    }
-
     public Computer() {
     }
 
     public Computer(int computerName) {
         this.computerName = computerName;
-    }
-
-
-    public Computer(int computerName, String status, int priceOfTime, int priceOfService, String usedTime, LocalTime startTime, LocalTime endTime) {
-        this.computerName = computerName;
-        this.status = status;
-        this.priceOfTime = priceOfTime;
-        this.priceOfService = priceOfService;
-        this.usedTime = usedTime;
-        this.startTime = startTime;
-        this.endTime = endTime;
     }
 
     public int getComputerName() {
@@ -51,7 +34,6 @@ public class Computer implements Runnable, Serializable {
     public String getStatus() {
         return status;
     }
-
 
     public void setStatus(String status) {
         this.status = status;
@@ -95,22 +77,6 @@ public class Computer implements Runnable, Serializable {
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
-    }
-
-    public int payment() {
-        return getMinute() * (getPriceOfTime() / 60) + getPriceOfService();
-    }
-
-    public void displayBored() {
-        System.out.println("┎───[TÊN MÁY]────────┬───[TRẠNG THÁI]────────┬───[THỜI GIAN]────────┬───[DỊCH VỤ]────────┬───[TỔNG TIỀN]────────┒");
-    }
-
-    public void display() {
-        System.out.printf("%1S%30S%24S%20S%22S\n","┠    " + getComputerName(), getStatus(), getUsedTime(), getPriceOfService(), payment());
-    }
-
-    public void displayBoredBot() {
-        System.out.println("┖────────────────────┴───────────────────────┴──────────────────────┴────────────────────┴──────────────────────┚");
     }
 
     public Date getStartUsed() {
@@ -171,33 +137,4 @@ public class Computer implements Runnable, Serializable {
             usedTime = "0:00:00";
         }
     }
-
-
-//    public String writeUser() {
-//        return getComputerName() + ", " + getUsedTime() + ", " + payment() + ", " + getStartTime() + ", " + getEndTime();
-//    }
-//
-//    private int hour = 0;
-//    private int minute = 0;
-//    private int second = 0;
-//    private final String abc = hour + ":" + minute + ":" + second;
-//
-//    @Override
-//    public void run() {
-//        while (getStatus().equals("available")) {
-//            try {
-//                Thread.sleep(1000);
-//                this.second++;
-//                if (this.second == 60) {
-//                    this.second = 0;
-//                    this.minute++;
-//                } else if (this.minute == 60) {
-//                    this.minute = 0;
-//                    this.hour++;
-//                }
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
 }

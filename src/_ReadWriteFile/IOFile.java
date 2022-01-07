@@ -11,7 +11,7 @@ public class IOFile<E> {
             objectOutputStream.writeObject(arrayData);
             objectOutputStream.close();
         } catch (IOException e) {
-            System.err.println("lỗi ghi file");
+            System.err.println("");
         }
     }
 
@@ -21,7 +21,7 @@ public class IOFile<E> {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(pathname));
             return (ArrayList<E>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            System.err.println("lỗi đọc file");
+            System.err.println("");
         }
         return null;
     }
