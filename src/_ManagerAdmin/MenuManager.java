@@ -28,7 +28,7 @@ public class MenuManager {
         System.out.println("┠ 1. Hiển thị máy               5. Thay đổi giá            9. Hiển thị dịch vụ        13. Chốt doanh thu phiên     ┨");
         System.out.println("┠ 2. Chọn máy                   6. Thêm máy                10. Thêm dịch vụ           14. Doanh thu theo ngày      ┨");
         System.out.println("┠ 3. Tài khoản người dùng       7. Sửa thông tin máy       11. Sửa dịch vụ            15. Doanh thu tổng           ┨");
-        System.out.println("┠                               8. Xóa máy                 12. Xóa dịch vụ            0. Đăng xuất                 ┨");
+        System.out.println("┠ 4. Sắp xếp máy                8. Xóa máy                 12. Xóa dịch vụ            0. Đăng xuất                 ┨");
         System.out.println("┖─────────────────────────────┴──────────────────────────┴──────────────────────────┴──────────────────────────────┚");
         System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
         int choice = scanner.nextInt();
@@ -51,8 +51,11 @@ public class MenuManager {
                     case 3:
                         accUserManager.accUserManager();
                         break;
+                    case 4:
+                        computerManager.sortManager();
+                        break;
                     case 5:
-                        computerManager.setupPriceOfTime2();
+                        computerManager.setupPriceOfTime();
                         break;
                     case 6:
                         computerManager.createComputer();

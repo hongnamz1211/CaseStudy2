@@ -5,10 +5,7 @@ import _ReadWriteFile.IOFile;
 import _Computer.Service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,12 +27,6 @@ public class ComputerManager {
 
     public ComputerManager() {
         patternNumber = Pattern.compile(REGEX_NUMBER);
-//        ArrayList<Service> services;
-//        if (PATHNAME_OF_SERVICE.length() == 0) {
-//            services = new ArrayList<>();
-//        } else {
-//            services = ioFileService.readFileData(PATHNAME_OF_SERVICE);
-//        }
     }
 
     private boolean validateNumber(String regex) {
@@ -284,7 +275,7 @@ public class ComputerManager {
         return 0;
     }
 
-    public void setupPriceOfTime2() {
+    public void setupPriceOfTime() {
         if (checkComputerDisable()) {
             int choice;
             do {
@@ -389,180 +380,84 @@ public class ComputerManager {
         return true;
     }
 
+    public void sortManager() {
+        int choice;
+        do {
+            System.out.println("SẮP XẾP MÁY");
+            System.out.println("1. Theo tên máy tăng dần");
+            System.out.println("2. Theo tên máy giảm dần");
+            System.out.println("3. Theo tổng tiền tăng dần");
+            System.out.println("4. Theo tổng tiền giảm dần");
+            System.out.println("Nhập lựa chọn");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    sortComputerNameUp();
+                    choice = 0;
+                    break;
+                case 2:
+                    sortComputerNameDown();
+                    choice = 0;
+                    break;
+                case 3:
+                    sortPaymentUp();
+                    choice = 0;
+                    break;
+                case 4:
+                    sortPaymentDown();
+                    choice = 0;
+                    break;
+                case 0:
+                    choice = 0;
+                    break;
+            }
+        } while (choice != 0);
+    }
 
+    public void sortComputerNameUp() {
+        computers.sort(new Comparator<Computer>() {
+            @Override
+            public int compare(Computer o1, Computer o2) {
+                if (o1.getComputerName() > o2.getComputerName()) return 1;
+                else if (o1.getComputerName() < o2.getComputerName()) return -1;
+                else return 0;
+            }
+        });
+        displayComputer();
+    }
 
+    public void sortComputerNameDown() {
+        computers.sort((o1, o2) -> {
+            if (o1.getComputerName() > o2.getComputerName()) return -1;
+            else if (o1.getComputerName() < o2.getComputerName()) return 1;
+            else return 0;
+        });
+        displayComputer();
+    }
 
-//
-//    public void createService() throws NumberFormatException {
-//        try {
-//            boolean checkService = false;
-//            System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ: ");
-//            String serviceName = scanner.nextLine();
-//            for (Service s :
-//                    services) {
-//                if (s.getServiceName().equals(serviceName)) {
-//                    System.out.println("[\uD83D\uDD14] Đã có dịch vụ này! Vui lòng nhập lại");
-//                    checkService = true;
-//                    break;
-//                }
-//            }
-//            int priceOfService;
-//            if (!checkService) {
-//                do {
-//                    System.out.print("[\uD83D\uDEAC] Nhập giá dịch vụ: ");
-//                    priceOfService = Integer.parseInt(scanner.nextLine());
-//                } while (!validateNumber(String.valueOf(priceOfService)));
-//                services.add(new Service(serviceName, priceOfService));
-//                ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-//                System.out.println("[\uD83D\uDD14] Thêm '" + serviceName + "' thành công");
-//                displayService();
-//            }
-//        } catch (Exception e) {
-//            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
-//        }
-//    }
-//
-//
-//    public void displayService() {
-//        if (PATHNAME_OF_SERVICE.length() == 0) {
-//            System.out.println("[\uD83D\uDD14] Chưa có dịch vụ nào! Vui lòng thêm dịch vụ!");
-//        } else {
-//            System.out.println("-----");
-//            System.out.println("BẢNG DỊCH VỤ");
-//            ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-//            ArrayList<Service> services = ioFileService.readFileData(PATHNAME_OF_SERVICE);
-//            service.displayBored();
-//            for (Service s :
-//                    services) {
-//                s.display();
-//            }
-//            service.displayBoredBot();
-//            System.out.println("-----");
-//            ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-//        }
-//    }
-//
-//    public void deleteService(String name) {
-//        boolean checkServiceName = false;
-//        Service service = null;
-//        for (Service s :
-//                services) {
-//            if (s.getServiceName().equals(name)) {
-//                checkServiceName = true;
-//                service = s;
-//            }
-//        }
-//        if (service != null) {
-//            services.remove(service);
-//            ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-//            System.out.println("[\uD83D\uDD14] Xóa '" + service.getServiceName() + "' thành công");
-//            displayService();
-//        }
-//        if (!checkServiceName) {
-//            System.out.println("[\uD83D\uDD14] Không tìm thấy dịch vụ! Vui lòng nhập lại!");
-//        }
-//    }
-//
-//    public void editService(String name) {
-//        boolean checkService = false;
-//        Service service = null;
-//        for (Service s :
-//                services) {
-//            if (s.getServiceName().equals(name)) {
-//                service = s;
-//            }
-//        }
-//        if (service != null) {
-//            int index = services.indexOf(service);
-//            System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ mới: ");
-//            String serviceName = scanner.nextLine();
-//            for (Service s :
-//                    services) {
-//                if (s.getServiceName().equals(serviceName)) {
-//                    System.out.println("[\uD83D\uDD14] Đã có dịch vụ này! Vui lòng nhập lại!");
-//                    checkService = true;
-//                    break;
-//                }
-//            }
-//            if (!checkService) {
-//                service.setServiceName(serviceName);
-//                System.out.print("[\uD83D\uDEAC] Nhập giá dịch vụ mới: ");
-//                int priceOfService = scanner.nextInt();
-//                service.setPriceOfService(priceOfService);
-//                scanner.nextLine();
-//                services.set(index, service);
-//                ioFileService.writerFileData(services, PATHNAME_OF_SERVICE);
-//                System.out.println("[\uD83D\uDD14] Cập nhật '" + serviceName + "' thành công");
-//                displayService();
-//            }
-//        }
-//    }
+    public int sortPayment(Computer computerName) {
+        return (computerName.getMinute() * (computerName.getPriceOfTime() / 60) + computer.getPriceOfService());
+    }
 
-//    public void turnOverAll() {
-//        Pattern pattern = Pattern.compile("^Ngày [0-9]+/[0-9]+:(.*?)VNĐ$");
-//        String line = "";
-//        Matcher matcher;
-//        int turnOver = 0;
-//        try {
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader("src/File/turnOver.csv"));
-//            while ((line = bufferedReader.readLine()) != null) {
-//                matcher = pattern.matcher(line);
-//                while (matcher.find()) {
-//                    turnOver += Integer.parseInt(matcher.group(1).trim());
-//                }
-//            }
-//            System.out.println("┎─────[CHỐT DOANH TỔNG]───────────────────────────┒");
-//            System.out.println("┠ ▹ Doanh thu: " + turnOver + "VNĐ");
-//            System.out.println("┖─────────────────────────────────────────────────┚");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void turnOverByDay() throws InputMismatchException, NumberFormatException {
-//        System.out.println("┎─────[DOANH THU THEO NGÀY]──────────┒");
-//        System.out.print("┠ ▹ Nhập ngày bắt đầu: ");
-//        int startDay = Integer.parseInt(scanner.nextLine());
-//        System.out.print("┠ ▹ Nhập tháng: ");
-//        int startmonth = Integer.parseInt(scanner.nextLine());
-//        System.out.print("┠ ▹ Nhập ngày kết thúc: ");
-//        int endDay = Integer.parseInt(scanner.nextLine());
-//        System.out.print("┠ ▹ Nhập tháng: ");
-//        int endMonth = Integer.parseInt(scanner.nextLine());
-//        System.out.println("┖─────────────────────────────────────┚");
-//        Pattern pattern = Pattern.compile("^Ngày [" + startDay + "-" + endDay + "]+/[" + startmonth + "-" + endMonth + "]+:(.*?)VNĐ$");
-//        String line = "";
-//        Matcher matcher;
-//        int turnOverByDay = 0;
-//        try {
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader("src/File/turnOver.csv"));
-//            while ((line = bufferedReader.readLine()) != null) {
-//                matcher = pattern.matcher(line);
-//                while (matcher.find()) {
-//                    turnOverByDay += Integer.parseInt(matcher.group(1).trim());
-//                }
-//            }
-//            System.out.println("┎─────[DOANH THU THEO NGÀY]───────────────────────┒");
-//            System.out.println("┠ ▹ Thời gian: " + startDay + "/" + startmonth + " - " + endDay + "/" + endMonth);
-//            System.out.println("┠ ▹ Doanh thu: " + turnOverByDay + "VNĐ");
-//            System.out.println("┖─────────────────────────────────────────────────┚");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void writeTurnOver() {
-//        System.out.println("┎─────[CHỐT DOANH THU CỦA PHIÊN]──────────────────┒");
-//        System.out.println("┠ ▹ Thời gian: " + new Date());
-//        System.out.println("┠ ▹ Doanh thu: " + getTurnOver() + "VNĐ");
-//        System.out.println("┖─────────────────────────────────────────────────┚");
-//        try {
-//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(PATHNAME_OF_TURNOVER, true));
-//            bufferedWriter.write("Ngày " + new Date().getDate() + "/" + (new Date().getMonth() + 1) + ":" + getTurnOver() + "VNĐ");
-//            bufferedWriter.newLine();
-//            bufferedWriter.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public void sortPaymentUp() {
+        computers.sort(new Comparator<Computer>() {
+            @Override
+            public int compare(Computer o1, Computer o2) {
+                if (payment(o1.getComputerName()) > payment(o2.getComputerName())) return 1;
+                else if (payment(o1.getComputerName()) < payment(o2.getComputerName())) return -1;
+                else return 0;
+            }
+        });
+        displayComputer();
+    }
+
+    public void sortPaymentDown() {
+        computers.sort((o1, o2) -> {
+            if (payment(o1.getComputerName()) > payment(o2.getComputerName())) return -1;
+            else if (payment(o1.getComputerName()) < payment(o2.getComputerName())) return 1;
+            else return 0;
+        });
+        displayComputer();
+    }
 }

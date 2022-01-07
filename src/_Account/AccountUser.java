@@ -35,7 +35,7 @@ public class AccountUser implements Serializable {
     }
 
     public void  display() {
-        System.out.printf("%-30s%-32s\n", "┠    " + getUserAcc(), getUserPass());
+        System.out.printf("%-30s%-30s\n", "┠    " + getUserAcc(), getUserPass());
     }
 
     public void displayBoredBot() {

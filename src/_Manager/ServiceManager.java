@@ -17,51 +17,35 @@ public class ServiceManager implements ModelManager {
     private final IOFile<Service> ioFile = new IOFile<>();
     private final File PATHNAME_OF_SERVICE = new File("src/File/service");
 
-    private static Pattern patternNumber;
-    private static final String REGEX_NUMBER = "^(\\d+)$";
-
     public ServiceManager() {
         if (PATHNAME_OF_SERVICE.length() == 0) {
-            patternNumber = Pattern.compile(REGEX_NUMBER);
             this.services = new ArrayList<>();
         } else {
             this.services = ioFile.readFileData(PATHNAME_OF_SERVICE);
         }
     }
 
-    private boolean validateNumber(String regex) {
-        Matcher matcher = patternNumber.matcher(regex);
-        return matcher.matches();
-    }
-
-
     @Override
     public void create() {
-        try {
-            boolean checkService = false;
-            System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ: ");
-            String serviceName = scanner.nextLine();
-            for (Service s :
-                    services) {
-                if (s.getServiceName().equals(serviceName)) {
-                    System.out.println("[\uD83D\uDD14] Đã có dịch vụ này! Vui lòng nhập lại");
-                    checkService = true;
-                    break;
-                }
+        boolean checkService = false;
+        System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ: ");
+        String serviceName = scanner.nextLine();
+        for (Service s :
+                services) {
+            if (s.getServiceName().equals(serviceName)) {
+                System.out.println("[\uD83D\uDD14] Đã có dịch vụ này! Vui lòng nhập lại");
+                checkService = true;
+                break;
             }
-            int priceOfService;
-            if (!checkService) {
-                do {
-                    System.out.print("[\uD83D\uDEAC] Nhập giá dịch vụ: ");
-                    priceOfService = Integer.parseInt(scanner.nextLine());
-                } while (!validateNumber(String.valueOf(priceOfService)));
-                services.add(new Service(serviceName, priceOfService));
-                ioFile.writerFileData(services, PATHNAME_OF_SERVICE);
-                System.out.println("[\uD83D\uDD14] Thêm '" + serviceName + "' thành công");
-                display();
-            }
-        } catch (Exception e) {
-            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
+        }
+        int priceOfService;
+        if (!checkService) {
+            System.out.print("[\uD83D\uDEAC] Nhập giá dịch vụ: ");
+            priceOfService = Integer.parseInt(scanner.nextLine());
+            services.add(new Service(serviceName, priceOfService));
+            ioFile.writerFileData(services, PATHNAME_OF_SERVICE);
+            System.out.println("[\uD83D\uDD14] Thêm '" + serviceName + "' thành công");
+            display();
         }
     }
 
