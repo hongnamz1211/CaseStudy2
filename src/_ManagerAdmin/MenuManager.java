@@ -9,7 +9,6 @@ import _ReadWriteFile.IOFileCSV;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 public class MenuManager {
     private final Scanner scanner = new Scanner(System.in);
     private final AccUserManager accUserManager = new AccUserManager();
@@ -22,13 +21,13 @@ public class MenuManager {
 
     public int choiceOfAdmin() {
 
-        System.out.println("\n                                 ꧁꧂HỆ THỐNG QUẢN LÝ QUÁN NET ꧁꧂");
-        System.out.println("                                        ───────────────────────        ");
+        System.out.println("\n                                 ꧁꧂ HỆ THỐNG QUẢN LÝ QUÁN NET ꧁꧂");
+        System.out.println("                                         ───────────────────────        ");
         System.out.println("┎───[QUẢN LÝ]─────────────────┬───[MÁY TÍNH]─────────────┬───[DỊCH VỤ]──────────────┬───[DOANH THU]────────────────┒");
-        System.out.println("┠ 1. Hiển thị máy               5. Thay đổi giá            9. Hiển thị dịch vụ        13. Chốt doanh thu phiên     ┨");
-        System.out.println("┠ 2. Chọn máy                   6. Thêm máy                10. Thêm dịch vụ           14. Doanh thu theo ngày      ┨");
-        System.out.println("┠ 3. Tài khoản người dùng       7. Sửa thông tin máy       11. Sửa dịch vụ            15. Doanh thu tổng           ┨");
-        System.out.println("┠ 4. Sắp xếp máy                8. Xóa máy                 12. Xóa dịch vụ            0. Đăng xuất                 ┨");
+        System.out.println("┠ 1. Hiển thị máy               5. Sắp xếp máy             9. Hiển thị dịch vụ       13. Chốt doanh thu phiên      ┨");
+        System.out.println("┠ 2. Chọn máy                   6. Thêm máy               10. Thêm dịch vụ           14. Doanh thu theo ngày       ┨");
+        System.out.println("┠ 3. Thay đổi giá               7. Sửa thông tin máy      11. Sửa dịch vụ            15. Doanh thu tổng            ┨");
+        System.out.println("┠ 4. Tài khoản người dùng       8. Xóa máy                12. Xóa dịch vụ             0. Đăng xuất                 ┨");
         System.out.println("┖─────────────────────────────┴──────────────────────────┴──────────────────────────┴──────────────────────────────┚");
         System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
         int choice = scanner.nextInt();
@@ -49,13 +48,13 @@ public class MenuManager {
                         computerManager.statusComputer();
                         break;
                     case 3:
-                        accUserManager.accUserManager();
+                        computerManager.setupPriceOfTime();
                         break;
                     case 4:
-                        computerManager.sortManager();
+                        accUserManager.accUserManager();
                         break;
                     case 5:
-                        computerManager.setupPriceOfTime();
+                        computerManager.sortManager();
                         break;
                     case 6:
                         computerManager.createComputer();

@@ -383,12 +383,13 @@ public class ComputerManager {
     public void sortManager() {
         int choice;
         do {
-            System.out.println("SẮP XẾP MÁY");
-            System.out.println("1. Theo tên máy tăng dần");
-            System.out.println("2. Theo tên máy giảm dần");
-            System.out.println("3. Theo tổng tiền tăng dần");
-            System.out.println("4. Theo tổng tiền giảm dần");
-            System.out.println("Nhập lựa chọn");
+            System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
+            System.out.println("┠     1. Theo tên máy tăng dần        ┨");
+            System.out.println("┠     2. Theo tên máy giảm dần        ┨");
+            System.out.println("┠     3. Theo tổng tiền tăng dần      ┨");
+            System.out.println("┠     4. Theo tổng tiền giảm dần      ┨");
+            System.out.println("┖─────────────────────────────────────┚");
+            System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
             choice = scanner.nextInt();
             scanner.nextLine();
             switch (choice) {
@@ -434,10 +435,6 @@ public class ComputerManager {
             else return 0;
         });
         displayComputer();
-    }
-
-    public int sortPayment(Computer computerName) {
-        return (computerName.getMinute() * (computerName.getPriceOfTime() / 60) + computer.getPriceOfService());
     }
 
     public void sortPaymentUp() {
