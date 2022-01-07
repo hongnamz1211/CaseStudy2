@@ -44,7 +44,7 @@ public class Service implements Serializable {
     }
 
     public void display() {
-        System.out.printf("%4s%26s\n", "┠    " + getServiceName(), getPriceOfService());
+        System.out.printf("%-30s%-30s\n", "┠    " + getServiceName(), getPriceOfService());
     }
 
     public void displayBoredBot() {

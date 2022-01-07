@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class IOFile<E> {
-
     public void writerFileData(ArrayList<E> arrayData, File pathname) {
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream((pathname)));
@@ -14,7 +13,6 @@ public class IOFile<E> {
             System.err.println("");
         }
     }
-
 
     public ArrayList<E> readFileData(File pathname) {
         try {

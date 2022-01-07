@@ -2,7 +2,9 @@ package _ManagerAdmin;
 
 import _Account.AccUserManager;
 import _Login.Login;
-import _Manager.Manager;
+import _Manager.ComputerManager;
+import _Manager.ServiceManager;
+import _ReadWriteFile.IOFileCSV;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -11,7 +13,9 @@ import java.util.Scanner;
 public class MenuManager {
     private final Scanner scanner = new Scanner(System.in);
     private final AccUserManager accUserManager = new AccUserManager();
-    private final Manager manager = new Manager();
+    private final ComputerManager computerManager = new ComputerManager();
+    private final IOFileCSV ioFileCSV = new IOFileCSV();
+    private final ServiceManager serviceManager = new ServiceManager();
 
     public MenuManager() {
     }
@@ -39,54 +43,54 @@ public class MenuManager {
                 choice = choiceOfAdmin();
                 switch (choice) {
                     case 1:
-                        manager.displayComputer();
+                        computerManager.displayComputer();
                         break;
                     case 2:
-                        manager.statusComputer();
+                        computerManager.statusComputer();
                         break;
                     case 3:
                         accUserManager.accUserManager();
                         break;
                     case 5:
-                        manager.setupPriceOfTime2();
+                        computerManager.setupPriceOfTime2();
                         break;
                     case 6:
-                        manager.createComputer();
+                        computerManager.createComputer();
                         break;
                     case 7:
                         System.out.print("[\uD83D\uDEAC] Nhập tên máy mốn sửa: ");
                         int editName = scanner.nextInt();
-                        manager.editComputer(editName);
+                        computerManager.editComputer(editName);
                         break;
                     case 8:
                         System.out.print("[\uD83D\uDEAC] Nhập tên máy muốn xóa: ");
                         int deleteName = scanner.nextInt();
-                        manager.deleteComputer(deleteName);
+                        computerManager.deleteComputer(deleteName);
                         break;
                     case 9:
-                        manager.displayService();
+                        serviceManager.display();
                         break;
                     case 10:
-                        manager.createService();
+                        serviceManager.create();
                         break;
                     case 11:
                         System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ muốn sửa: ");
                         String serEdit = scanner.nextLine();
-                        manager.editService(serEdit);
+                        serviceManager.edit(serEdit);
                         break;
                     case 12:
                         System.out.print("[\uD83D\uDEAC] Nhập tên dịch vụ muốn xóa: ");
                         String serDel = scanner.nextLine();
-                        manager.deleteService(serDel);
+                        serviceManager.delete(serDel);
                         break;
                     case 13:
-                        manager.writeTurnOver();
+                        ioFileCSV.writeTurnOver();
                         break;
                     case 14:
-                        manager.turnOverByDay();
+                        ioFileCSV.turnOverByDay();
                         break;
                     case 15:
-                        manager.turnOverAll();
+                        ioFileCSV.turnOverAll();
                         break;
                     case 0:
                         System.out.println("[\uD83D\uDD14] Đăng xuất thành công");
