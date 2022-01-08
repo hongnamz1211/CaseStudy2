@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 public class ComputerManager {
     private static int turnOver = 0;
+    private static int priceOfTime = 18000;
     private final Scanner scanner = new Scanner(System.in);
     private final ArrayList<Computer> computers = new ArrayList<>();
 
@@ -50,7 +51,7 @@ public class ComputerManager {
             }
         }
         if (!checkComputer) {
-            computers.add(new Computer(computerName));
+            computers.add(new Computer(computerName, priceOfTime));
             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
             System.out.println("-----");
             System.out.println("[\uD83D\uDD14] Thêm máy số '" + computerName + "' thành công");
@@ -303,6 +304,13 @@ public class ComputerManager {
         }
     }
 
+//    public void setPriceOfTime() {
+//        for (Computer c :
+//                computers) {
+//            c.setPriceOfTime(priceOfTime);
+//        }
+//    }
+
     public void setPriceOfTimeOneComputer() {
         int choice;
         boolean checkComputerName = false;
@@ -312,7 +320,7 @@ public class ComputerManager {
             System.out.print("[\uD83D\uDEAC] Nhập số máy: ");
             int computerNumber = scanner.nextInt();
             System.out.print("[\uD83D\uDEAC] Nhập giá mới: ");
-            int priceOfTime = scanner.nextInt();
+            int priceOfTimeOneComputer = scanner.nextInt();
             System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
             System.out.println("┠     1. Xác nhận                     ┨");
             System.out.println("┠     0. Quay lại                     ┨");
@@ -325,7 +333,7 @@ public class ComputerManager {
                     for (Computer c :
                             computers) {
                         if (c.getComputerName() == computerNumber) {
-                            c.setPriceOfTime(priceOfTime);
+                            c.setPriceOfTime(priceOfTimeOneComputer);
                             System.out.println("[\uD83D\uDD14] Thay đổi giá máy số '" + c.getComputerName() + "' thành '" + c.getPriceOfTime() + "'/1h thành công");
                             ioFileComputer.writerFileData(computers, PATHNAME_OF_COMPUTER);
                             checkComputerName = true;
@@ -346,7 +354,7 @@ public class ComputerManager {
             System.out.println("-----");
             System.out.println("THAY ĐỔI GIÁ TẤT CẢ MÁY");
             System.out.print("[\uD83D\uDEAC] Nhập giá mới: ");
-            int priceOfTime = scanner.nextInt();
+            priceOfTime = scanner.nextInt();
             System.out.println("┎─────[XÁC NHẬN THAY ĐỔI GIÁ]─────────┒");
             System.out.println("┠     1. Xác nhận                     ┨");
             System.out.println("┠     0. Quay lại                     ┨");
@@ -388,6 +396,7 @@ public class ComputerManager {
             System.out.println("┠     2. Theo tên máy giảm dần        ┨");
             System.out.println("┠     3. Theo tổng tiền tăng dần      ┨");
             System.out.println("┠     4. Theo tổng tiền giảm dần      ┨");
+            System.out.println("┠     0. Quay lại                     ┨");
             System.out.println("┖─────────────────────────────────────┚");
             System.out.print("[\uD83D\uDEAC] Nhập lựa chọn: ");
             choice = scanner.nextInt();

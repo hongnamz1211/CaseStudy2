@@ -19,8 +19,9 @@ public class Computer implements Runnable, Serializable {
     public Computer() {
     }
 
-    public Computer(int computerName) {
+    public Computer(int computerName, int priceOfTime) {
         this.computerName = computerName;
+        this.priceOfTime = priceOfTime;
     }
 
     public int getComputerName() {
@@ -134,7 +135,7 @@ public class Computer implements Runnable, Serializable {
             usedTime = String.format("%d:%02d:%02d", duration / 3600, minute, duration % 60);
         }
         if (done) {
-            usedTime = "0:00:00";
+            setUsedTime("0:00:00");
         }
     }
 }
