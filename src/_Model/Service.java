@@ -1,4 +1,4 @@
-package _Computer;
+package _Model;
 
 import java.io.Serializable;
 

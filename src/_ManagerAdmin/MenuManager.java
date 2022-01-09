@@ -95,11 +95,15 @@ public class MenuManager {
                         ioFileCSV.turnOverAll();
                         break;
                     case 0:
-                        System.out.println("[\uD83D\uDD14] Đăng xuất thành công");
-                        (new Login()).loginSystems();
-                        break;
+                        if (computerManager.checkComputerDisable()) {
+                            System.out.println("[\uD83D\uDD14] Đăng xuất thành công");
+                            (new Login()).loginSystems();
+                            break;
+                        } else {
+                            System.out.println("[\uD83D\uDD14] Vui lòng tắt hết máy trước khi đăng xuất");
+                        }
                 }
-            } while (choice != 0);
+            } while (choice != 12112000);
         } catch (InputMismatchException | NumberFormatException e) {
             System.out.println();
             System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");

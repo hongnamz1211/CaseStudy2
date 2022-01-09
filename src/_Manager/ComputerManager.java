@@ -1,8 +1,8 @@
 package _Manager;
 
-import _Computer.Computer;
+import _Model.Computer;
 import _ReadWriteFile.IOFile;
-import _Computer.Service;
+import _Model.Service;
 
 import java.io.*;
 import java.util.*;
@@ -69,7 +69,7 @@ public class ComputerManager {
             System.out.println("┎───[TÊN MÁY]────────┬───[TRẠNG THÁI]────────┬───[THỜI GIAN]────────┬───[GIÁ / GIỜ]────────┬───[DỊCH VỤ]────────┬───[TỔNG TIỀN]────────┒");
             for (Computer c :
                     computers) {
-                System.out.printf("%1S%30S%22S%22S%22S%22s\n", "┠    " + c.getComputerName(), c.getStatus(), c.getUsedTime(), c.getPriceOfTime(), c.getPriceOfService(), payment(c.getComputerName()));
+                System.out.printf("%-26S%-24S%-24S%-22S%-25S%-22s\n", "┠    " + c.getComputerName(), c.getStatus(), c.getUsedTime(), c.getPriceOfTime(), c.getPriceOfService(), payment(c.getComputerName()));
             }
             System.out.println("┖────────────────────┴───────────────────────┴──────────────────────┴──────────────────────┴────────────────────┴──────────────────────┚");
             System.out.println("-----");
@@ -212,7 +212,7 @@ public class ComputerManager {
                     if (s.getServiceName().equals(name)) {
                         priceOfService += s.getPriceOfService();
                         checkServiceName = true;
-                        System.out.println("Thêm '" + s.getServiceName() + "' vào máy số '" + c.getComputerName() + "' thành công");
+                        System.out.println("[\uD83D\uDD14] Thêm '" + s.getServiceName() + "' vào máy số '" + c.getComputerName() + "' thành công");
                     }
                 }
                 if (!checkServiceName) {
@@ -303,13 +303,6 @@ public class ComputerManager {
             System.out.println("[\uD83D\uDD14] Vui lòng tắt hết máy trước khi thay đổi");
         }
     }
-
-//    public void setPriceOfTime() {
-//        for (Computer c :
-//                computers) {
-//            c.setPriceOfTime(priceOfTime);
-//        }
-//    }
 
     public void setPriceOfTimeOneComputer() {
         int choice;

@@ -7,6 +7,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AccUserManager implements ModelManager {
     private final Scanner scanner = new Scanner(System.in);
@@ -16,12 +18,29 @@ public class AccUserManager implements ModelManager {
     private final IOFile<AccountUser> ioFile = new IOFile<>();
     private final File PATHNAME_OF_ACC_USER = new File("src/File/accUser");
 
+    private Pattern pattern;
+    private static final String REGEX_ACCOUNT = "^(?=.*[a-z])(?=.*[0-9]).{6,12}$";
+    private static final String REGEX_PASS = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,16}$";
+
+
     public AccUserManager() {
         if (PATHNAME_OF_ACC_USER.length() == 0) {
             this.accountUsers = new ArrayList<>();
         } else {
             this.accountUsers = readFileData();
         }
+    }
+
+    public boolean validateAccount(String regex) {
+        pattern = Pattern.compile(REGEX_ACCOUNT);
+        Matcher matcher = pattern.matcher(regex);
+        return matcher.matches();
+    }
+
+    public boolean validatePass(String regex) {
+        pattern = Pattern.compile(REGEX_PASS);
+        Matcher matcher = pattern.matcher(regex);
+        return matcher.matches();
     }
 
     public void writeFileData(ArrayList<AccountUser> accountUsers) {
@@ -83,8 +102,13 @@ public class AccUserManager implements ModelManager {
     @Override
     public void create() {
         boolean checkAccUser = false;
-        System.out.print("[\uD83D\uDEAC] Nhập tài khoản: ");
-        String userAcc = scanner.nextLine();
+        String userAcc;
+        String userPass;
+        do {
+            System.out.println("6-12 ký tự (gồm a-z & 0-9)");
+            System.out.print("[\uD83D\uDEAC] Nhập tài khoản: ");
+            userAcc = scanner.nextLine();
+        } while (!validateAccount(userAcc));
         for (AccountUser a :
                 accountUsers) {
             if (a.getUserAcc().equals(userAcc)) {
@@ -94,8 +118,11 @@ public class AccUserManager implements ModelManager {
             }
         }
         if (!checkAccUser) {
-            System.out.print("[\uD83D\uDEAC] Nhập mật khẩu: ");
-            String userPass = scanner.nextLine();
+            do {
+                System.out.println("6-12 ký tự (gồm A-Z, a-z & 0-9)");
+                System.out.print("[\uD83D\uDEAC] Nhập mật khẩu: ");
+                userPass = scanner.nextLine();
+            } while (!validatePass(userPass));
             AccountUser accountUser = new AccountUser(userAcc, userPass);
             accountUsers.add(accountUser);
             writeFileData(accountUsers);
@@ -140,6 +167,8 @@ public class AccUserManager implements ModelManager {
     @Override
     public void edit(String editName) {
         boolean checkAccUser = false;
+        String userAcc;
+        String userPass;
         AccountUser accountUser = null;
         for (AccountUser a :
                 accountUsers) {
@@ -149,8 +178,11 @@ public class AccUserManager implements ModelManager {
         }
         if (accountUser != null) {
             int index = accountUsers.indexOf(accountUser);
-            System.out.print("[\uD83D\uDEAC] Nhập tài khoản: ");
-            String userAcc = scanner.nextLine();
+            do {
+                System.out.println("6-12 ký tự (gồm a-z & 0-9)");
+                System.out.print("[\uD83D\uDEAC] Nhập tài khoản: ");
+                userAcc = scanner.nextLine();
+            } while (!validateAccount(userAcc));
             for (AccountUser a :
                     accountUsers) {
                 if (a.getUserAcc().equals(userAcc)) {
@@ -160,9 +192,12 @@ public class AccUserManager implements ModelManager {
                 }
             }
             if (!checkAccUser) {
-                accountUser.setUserAcc(userAcc);
-                System.out.print("[\uD83D\uDEAC] Nhập mật khẩu: ");
-                String userPass = scanner.nextLine();
+                do {
+                    System.out.println("6-12 ký tự (gồm A-Z, a-z & 0-9)");
+                    System.out.print("[\uD83D\uDEAC] Nhập mật khẩu: ");
+                    userPass = scanner.nextLine();
+                } while (!validatePass(userPass));
+                userPass = scanner.nextLine();
                 accountUser.setUserPass(userPass);
                 accountUsers.set(index, accountUser);
                 writeFileData(accountUsers);

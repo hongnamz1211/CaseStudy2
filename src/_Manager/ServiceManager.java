@@ -1,6 +1,6 @@
 package _Manager;
 
-import _Computer.Service;
+import _Model.Service;
 import _ReadWriteFile.IOFile;
 
 import java.io.File;
