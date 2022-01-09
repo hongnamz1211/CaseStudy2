@@ -45,11 +45,7 @@ public class Login {
                     signInManager();
                     break;
                 case 2:
-                    System.out.println("┎─────[XÁC NHẬN ĐIỆN THOẠI]───────────┒");
-                    System.out.print("┠ ▹ Nhập số điện thoại: ");
-                    String phoneNumber = scanner.nextLine();
-                    System.out.println("┖─────────────────────────────────────┚");
-                    signUpManager(phoneNumber);
+                    signUpManager();
                     break;
                 case 0:
                     System.exit(0);
@@ -59,7 +55,7 @@ public class Login {
     }
 
     private void addAccount() {
-        writeAccountAdmin("admin", "12345", "0868886855");
+        writeAccountAdmin("admin", "12345");
     }
 
     private void signInManager() {
@@ -73,15 +69,14 @@ public class Login {
         checkAcc(adminAcc, adminPass);
     }
 
-    private void signUpManager(String phoneNumber) {
+    private void signUpManager() {
         System.out.println("┎─────[ĐĂNG KÝ]───────────────────────┒");
         System.out.print("┠ ▹ Nhập tài khoản mới: ");
         String adminAcc = scanner.nextLine();
         System.out.print("┠ ▹ Nhập mật khẩu mới: ");
         String adminPass = scanner.nextLine();
         System.out.println("┖─────────────────────────────────────┚");
-        writeAccountAdmin(adminAcc, adminPass, phoneNumber);
-        checkPhoneNumber(phoneNumber);
+        writeAccountAdmin(adminAcc, adminPass);
     }
 
     private void checkAcc(String adminAcc, String adminPass) {
@@ -103,24 +98,24 @@ public class Login {
         }
     }
 
-    private void checkPhoneNumber(String phoneNumber) {
-        try {
-            if (checkPhoneNumberAdmin(phoneNumber)) {
-                System.out.println();
-                System.out.println("[\uD83D\uDD14] Cập nhật tài khoản thành công! Vui lòng đăng nhập lại");
-                System.out.println();
-                menuLogin();
-            } else {
-                System.out.println("[\uD83D\uDD14] Sai thông tin số điện thoại! Vui lòng nhập lại!");
-                menuLogin();
-            }
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println();
-            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
-            System.out.println();
-            menuLogin();
-        }
-    }
+//    private void checkPhoneNumber(String phoneNumber) {
+//        try {
+//            if (checkPhoneNumberAdmin(phoneNumber)) {
+//                System.out.println();
+//                System.out.println("[\uD83D\uDD14] Cập nhật tài khoản thành công! Vui lòng đăng nhập lại");
+//                System.out.println();
+//                menuLogin();
+//            } else {
+//                System.out.println("[\uD83D\uDD14] Sai thông tin số điện thoại! Vui lòng nhập lại!");
+//                menuLogin();
+//            }
+//        } catch (IndexOutOfBoundsException e) {
+//            System.out.println();
+//            System.out.println("[\uD83D\uDD14] Nhập sai dữ liệu! Vui lòng nhập lại");
+//            System.out.println();
+//            menuLogin();
+//        }
+//    }
 
     private boolean checkAccAdminInLogin(String adminAcc, String adminPass) {
         for (AccountAdmin a :
@@ -133,18 +128,7 @@ public class Login {
         return false;
     }
 
-    private boolean checkPhoneNumberAdmin(String phoneNumber) {
-        for (AccountAdmin a :
-                accAdminManager.getAccountAdmins()) {
-            boolean checkPhoneNumber = phoneNumber.equals(a.getPhoneNumber());
-            if (checkPhoneNumber) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void writeAccountAdmin(String adminAcc, String adminPass, String phoneNumber) {
-        accAdminManager.setListAdmin(adminAcc, adminPass, "0868886855");
+    private void writeAccountAdmin(String adminAcc, String adminPass) {
+        accAdminManager.setListAdmin(adminAcc, adminPass);
     }
 }

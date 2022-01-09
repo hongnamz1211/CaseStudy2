@@ -17,14 +17,14 @@ public class AccAdminManager {
         return ioFile.readFileData(PATHNAME_OF_ACC_ADMIN);
     }
 
-    public void setListAdmin(String adminAcc, String adminPass, String phoneNumber) {
+    public void setListAdmin(String adminAcc, String adminPass) {
         ArrayList<AccountAdmin> accountAdmins;
         if (checkFile()) {
             accountAdmins = accountAdminList;
         } else {
             accountAdmins = getAccountAdmins();
         }
-        accountAdmins.add(new AccountAdmin(adminAcc, adminPass, phoneNumber));
+        accountAdmins.add(new AccountAdmin(adminAcc, adminPass));
         ioFile.writerFileData(accountAdmins, PATHNAME_OF_ACC_ADMIN);
     }
 
